@@ -1,0 +1,10 @@
+BUGS AND TODOS
+--------------
+  * @todo Add an actual book selector to book-comments.php with errors, etc.
+  * @todo Add username support and only show comments up to reading position.
+https://readmill.com/jhmapleybrittle/reads/my-phone-book
+https://readmill.com/books/linchpin-are-you-indispensable
+
+VERSION 0.1, 2013-XX-XX
+-----------------------
+  * Initial public release.
