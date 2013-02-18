@@ -36,7 +36,11 @@ foreach ($data->readings as $reading) {
         // positioned in the book (approximately, given multiple book formats).
         $position = (string) $highlight->locators->position;
         $data->highlights[$position][$highlight->id]['highlight'] = $highlight;
-        $data->highlights[$position][$highlight->id]['comments'] = $comments;
+
+        foreach ($comments as $comment) {
+          $timestamp = strtotime($comment->posted_at);
+          $data->highlights[$position][$highlight->id]['comments'][$timestamp] = $comment;
+        }
       }
     }
   }
@@ -80,12 +84,16 @@ ksort($data->highlights);
                 print '<article class="highlight">';
                 print   '<blockquote>' . htmlentities($highlight['highlight']->content) . '</blockquote>';
                 print   '<section class="comments">';
-                foreach ($highlight['comments'] as $comment_id => $comment) {
+                foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
-                  print     '<a class="image"><img src="' . $comment->user->avatar_url . '" /></a>';
-                  print     '<div class="content">';
-                  print       '<a href="" class="fullname">' . $comment->user->fullname . '</a> ';
+                  print     '<a href="' . $comment->user->permalink_url . '" class="image"><img src="' . $comment->user->avatar_url . '" /></a>';
+                  print     '<div class="content">'; // Display the comment as one big paragraph, even if it has newlines of its own.
+                  print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
                   print       '<p>' . $comment->content . '</p>';
+                  print       '<aside class="metadata">';
+                  print         '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y', $timestamp) . '</time> &middot; ';
+                  print         '<a href="http://readmill.com/' . $comment->user->username . '/reads/' . $data->book->permalink . '/highlights/' . $highlight['highlight']->permalink . '">Reply to comment</a>';
+                  print       '</aside>';
                   print     '</div>';
                   print   '</article>';
                 }
