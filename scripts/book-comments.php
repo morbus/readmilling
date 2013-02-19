@@ -23,6 +23,7 @@ $data->readings = readmill_book_readings($data->book->id);
 // For every reading, fetch all the highlights and then any comments that
 // have been left on those highlights. This is a comment-centric view -- if
 // a highlight has no comments, we're not interested.
+$highlights_to_merge = array();
 foreach ($data->readings as $reading) {
   if ($reading->highlights_count >= 1) {
     $highlights = readmill_reading_highlights($reading->id);
@@ -39,14 +40,53 @@ foreach ($data->readings as $reading) {
 
         foreach ($comments as $comment) {
           $timestamp = strtotime($comment->posted_at);
+
+          // Store the comment keyed to timestamp for re-sorting after highlight merge.
           $data->highlights[$position][$highlight->id]['comments'][$timestamp] = $comment;
+
+          // Create a permalink URL that persists after our highlight merging.
+          // (Some values become inaccessible when things are merged together.)
+          $comment->permalink_url = 'http://readmill.com/' . $comment->user->username
+            . '/reads/' . $data->book->permalink . '/highlights/' . $highlight->permalink;
         }
+
+        // Duplicate our highlight storage, but by highlight length, for potential merging below.
+        $highlights_to_merge[strlen($highlight->content) . '.' . rand(0,999)] = $data->highlights[$position][$highlight->id];
       }
     }
   }
 }
 
+// Sort by position.
 ksort($data->highlights);
+
+// Any user can highlight, and comment upon, the same bit of text, but they
+// aren't merged together into a single entry inside Readmill. We'll try to
+// do so here, looking for highlights that fit inside other highlights and
+// merging the comments together for a more concise display.
+ksort($highlights_to_merge); // Sort by smallest highlight.
+while (count($highlights_to_merge) != 0) {
+  $smallest_highlight = array_shift($highlights_to_merge);
+
+  foreach ($highlights_to_merge as $length => $highlight) {
+    if (strpos($highlight['highlight']->content, $smallest_highlight['highlight']->content) !== FALSE) {
+      // A match!: We've a smaller highlight that is a snippet of a bigger one.
+      // Merge the smaller's comments into the bigger and re-sort by timestamp.
+      $bigger_position = (string) $highlight['highlight']->locators->position;
+      $data->highlights[$bigger_position][$highlight['highlight']->id]['comments'] += $smallest_highlight['comments'];
+      ksort($data->highlights[$bigger_position][$highlight['highlight']->id]['comments']);
+
+      // Remove the smaller highlight as the bigger highlight has now eaten its comments.
+      $smallest_position = (string) $smallest_highlight['highlight']->locators->position;
+      unset($data->highlights[$smallest_position][$smallest_highlight['highlight']->id]);
+
+      // All highlights for this position are merged. Remove.
+      if (count($data->highlights[$smallest_position]) == 0) {
+        unset($data->highlights[$smallest_position]);
+      }
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,7 +132,7 @@ ksort($data->highlights);
                   print       '<p>' . $comment->content . '</p>';
                   print       '<aside class="metadata">';
                   print         '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y', $timestamp) . '</time> &middot; ';
-                  print         '<a href="http://readmill.com/' . $comment->user->username . '/reads/' . $data->book->permalink . '/highlights/' . $highlight['highlight']->permalink . '">Reply to comment</a>';
+                  print         '<a href="' . $comment->permalink_url . '">Reply to comment</a>';
                   print       '</aside>';
                   print     '</div>';
                   print   '</article>';
