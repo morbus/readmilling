@@ -134,7 +134,8 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 10px;
 }
 
-.layout-primary-column section h2 {
+.layout-primary-column section h1,
+.layout-secondary-column section h1 {
   font-family: "Scala Sans SC", Helvetica, Arial, sans-serif;
   font-size: 20px;
   line-height: 1.5;
@@ -229,6 +230,31 @@ article.comment aside {
   width: 238px;
 }
 
+.layout-secondary-column .secondary-section {
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 14px;
+  line-height: 1.5;
+  padding-left: 8.33333%;
+  padding-right: 8.33333%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 .layout-secondary img {
   max-width: 100%;
+}
+
+footer .container {
+  font-size: 14px;
+  padding: 12px 0 30px;
+  text-align: right;
+}
+
+footer .container a {
+  color: black;
+  text-decoration: none;
+}
+
+footer .container a:hover {
+  text-decoration: underline;
 }

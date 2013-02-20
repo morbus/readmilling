@@ -74,8 +74,11 @@ while (count($highlights_to_merge) != 0) {
     // but another person doesn't in a larger highlight, we'd miss a proper
     // merge. To get around this, we shorten the smallest highlight string by
     // 1, hopefully removing any dastardly punctuation that might cause a miss.
-    // https://readmill.com/Tobystereo/reads/html5-for-web-designers/highlights/0uxg9q
-    // https://readmill.com/challberg/reads/html5-for-web-designers/highlights/6fd8
+    // Some examples of this include
+    //   https://readmill.com/Tobystereo/reads/html5-for-web-designers/highlights/0uxg9q
+    //   https://readmill.com/challberg/reads/html5-for-web-designers/highlights/6fd8
+    //   https://readmill.com/vasilis/reads/html5-for-web-designers/highlights/117d
+    //   https://readmill.com/asia/reads/html5-for-web-designers/highlights/2rasra
     $smallest_highlight_string = substr_replace($smallest_highlight['highlight']->content, "", -1);
 
     if (strpos($highlight['highlight']->content, $smallest_highlight_string) !== FALSE) {
@@ -126,7 +129,7 @@ while (count($highlights_to_merge) != 0) {
           </h1>
         </header>
         <section id="highlights">
-          <h2>Comments</h2>
+          <h1>Comments</h1>
           <?php
             foreach ($data->highlights as $position => $highlights) {
               foreach ($highlights as $highlight_id => $highlight) {
@@ -156,12 +159,31 @@ while (count($highlights_to_merge) != 0) {
     </section>
 
     <aside class="layout-secondary">
-      <section>
-        <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
-      </section>
+      <div class="layout-secondary-column">
+        <section class="book-cover">
+          <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
+        </section>
+        <section class="secondary-section">
+          <h1>About this script</h2>
+          <p><b>book-comments.php</b> tries to merge all comments left on similar
+          highlights into a single entry. Different versions of the same book can
+          have highlights in different locations, so the script can't guarantee
+          the merged entries are in the same order they appear in the text. (The
+          script doesn't have access to the book file&mdash;we can't check
+          for the right order.)</p>
+        </section>
+        @todo add book selector.
+        @todo add donation button
+      </div>
     </aside>
   </div>
 
-@todo finish footer here
+  <footer>
+    <div class="container">
+      <a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is free software released
+      under the <a href="http://www.gnu.org/licenses/quick-guide-gplv3.html">GPL v3</a> or later.</a>
+      <a href="https://github.com/morbus/readmilling">Browse the source code at Github.</a>
+    </div>
+  </footer>
 </body>
 </html>
