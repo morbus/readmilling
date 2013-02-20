@@ -138,7 +138,7 @@ while (count($highlights_to_merge) != 0) {
                 print   '<section class="comments">';
                 foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
-                  print     '<a href="' . $comment->user->permalink_url . '" class="image"><img src="' . $comment->user->avatar_url . '" /></a>';
+                  print     '<a href="' . $comment->user->permalink_url . '" class="image"><img src="' . $comment->user->avatar_url . '" alt="' . $comment->user->fullname . '" /></a>';
                   print     '<div class="content">'; // Display the comment as one single paragraph, even if it has lovable newlines of its own.
                   print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
                   print       '<p>' . $comment->content . '</p>';
@@ -164,7 +164,7 @@ while (count($highlights_to_merge) != 0) {
           <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
         </section>
         <section class="secondary-section">
-          <h1>About this script</h2>
+          <h1>About this script</h1>
           <p><b>book-comments.php</b> tries to merge all comments left on similar
           highlights into a single entry. Different versions of the same book can
           have highlights in different locations, so the script can't guarantee
@@ -181,7 +181,7 @@ while (count($highlights_to_merge) != 0) {
   <footer>
     <div class="container">
       <a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is free software released
-      under the <a href="http://www.gnu.org/licenses/quick-guide-gplv3.html">GPL v3</a> or later.</a>
+      under the <a href="http://www.gnu.org/licenses/quick-guide-gplv3.html">GPL v3</a> or later.
       <a href="https://github.com/morbus/readmilling">Browse the source code at Github.</a>
     </div>
   </footer>

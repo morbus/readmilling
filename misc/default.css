@@ -6,7 +6,7 @@
 @font-face {
   font-family: "Scala";
   font-style: normal;
-  font-weight: normal
+  font-weight: normal;
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-54c96cbf459f9418b19da7920d8d4780.eot');
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont.eot?#iefix') format("embedded-opentype"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-35ae67e8080d81eebf98e9d85d907ba8.woff') format("woff"),
@@ -17,7 +17,7 @@
 @font-face {
   font-family: "Scala";
   font-style: italic;
-  font-weight: normal
+  font-weight: normal;
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont-c4adac75afdf35c5387a14500d91cd5f.eot');
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont.eot?#iefix') format("embedded-opentype"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont-85981446788c54e7abf99d0dbfd9e543.woff') format("woff"),
@@ -28,7 +28,7 @@
 @font-face {
   font-family: "Scala";
   font-style: normal;
-  font-weight: bold
+  font-weight: bold;
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-54c96cbf459f9418b19da7920d8d4780.eot');
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont.eot?#iefix') format("embedded-opentype"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-35ae67e8080d81eebf98e9d85d907ba8.woff') format("woff"),
@@ -39,7 +39,7 @@
 @font-face{
   font-family: "Scala Sans SC";
   font-style: normal;
-  font-weight: normal
+  font-weight: normal;
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-f75fdf1f8d80fcefcde6d5ddc3499e2f.eot');
   src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont.eot?#iefix') format("embedded-opentype"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-e05fe652c62b4441ca4bc4fbb49ef5f2.woff') format("woff"),
@@ -140,7 +140,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 20px;
   line-height: 1.5;
   margin: 0;
-  text-rendering: optimizeLegibiility;
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
 }
@@ -149,7 +148,6 @@ h1, h2, h3, h4, h5, h6 {
   display: block;
   font-size: 40px;
   line-height: 1.3;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -165,7 +163,6 @@ h1, h2, h3, h4, h5, h6 {
   font-style: italic;
   line-height: 1.3;
   margin-bottom: 10px;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
