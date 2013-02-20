@@ -69,7 +69,16 @@ while (count($highlights_to_merge) != 0) {
   $smallest_highlight = array_shift($highlights_to_merge);
 
   foreach ($highlights_to_merge as $length => $highlight) {
-    if (strpos($highlight['highlight']->content, $smallest_highlight['highlight']->content) !== FALSE) {
+    // Highlighting the final bit of punctuation in a paragraph can sometimes
+    // be difficult. If one person bothers to select it in a smaller highlight,
+    // but another person doesn't in a larger highlight, we'd miss a proper
+    // merge. To get around this, we shorten the smallest highlight string by
+    // 1, hopefully removing any dastardly punctuation that might cause a miss.
+    // https://readmill.com/Tobystereo/reads/html5-for-web-designers/highlights/0uxg9q
+    // https://readmill.com/challberg/reads/html5-for-web-designers/highlights/6fd8
+    $smallest_highlight_string = substr_replace($smallest_highlight['highlight']->content, "", -1);
+
+    if (strpos($highlight['highlight']->content, $smallest_highlight_string) !== FALSE) {
       // A match!: We've a smaller highlight that is a snippet of a bigger one.
       // Merge the smaller's comments into the bigger and re-sort by timestamp.
       $bigger_position = (string) $highlight['highlight']->locators->position;
@@ -80,8 +89,8 @@ while (count($highlights_to_merge) != 0) {
       $smallest_position = (string) $smallest_highlight['highlight']->locators->position;
       unset($data->highlights[$smallest_position][$smallest_highlight['highlight']->id]);
 
-      // All highlights for this position are merged. Remove.
-      if (count($data->highlights[$smallest_position]) == 0) {
+      // All highlights for this position are merged. Remove the position.
+      if (isset($data->highlights[$smallest_position]) && count($data->highlights[$smallest_position]) == 0) {
         unset($data->highlights[$smallest_position]);
       }
     }
@@ -112,7 +121,7 @@ while (count($highlights_to_merge) != 0) {
       <div class="layout-primary-column">
         <header>
           <h1>
-            <span class="header-group-primary"><?php print $data->book->title; ?></span>
+            <span class="header-group-primary"><a href="<?php print $data->book->permalink_url; ?>"><?php print $data->book->title; ?></a></span>
             <span class="header-group-secondary"><?php print $data->book->author; ?></span>
           </h1>
         </header>
@@ -127,7 +136,7 @@ while (count($highlights_to_merge) != 0) {
                 foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
                   print     '<a href="' . $comment->user->permalink_url . '" class="image"><img src="' . $comment->user->avatar_url . '" /></a>';
-                  print     '<div class="content">'; // Display the comment as one big paragraph, even if it has newlines of its own.
+                  print     '<div class="content">'; // Display the comment as one single paragraph, even if it has lovable newlines of its own.
                   print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
                   print       '<p>' . $comment->content . '</p>';
                   print       '<aside class="metadata">';
@@ -147,10 +156,12 @@ while (count($highlights_to_merge) != 0) {
     </section>
 
     <aside class="layout-secondary">
-inside secondary column
+      <section>
+        <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
+      </section>
     </aside>
   </div>
 
-finish footer here
+@todo finish footer here
 </body>
 </html>

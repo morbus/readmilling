@@ -152,6 +152,11 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-font-smoothing: antialiased;
 }
 
+.header-group-primary a {
+  color: black;
+  text-decoration: none;
+}
+
 .header-group-secondary {
   color: gray;
   display: block;
@@ -165,8 +170,13 @@ h1, h2, h3, h4, h5, h6 {
 
 #highlights article.highlight {
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #ededed;
+}
+
+.layout-primary-column section:last-child,
+#highlights article.highlight:last-child {
+  border-bottom: none;
 }
 
 #highlights article.highlight blockquote {
@@ -217,4 +227,8 @@ article.comment aside {
   padding-bottom: 2000em;
   float: left;
   width: 238px;
+}
+
+.layout-secondary img {
+  max-width: 100%;
 }
