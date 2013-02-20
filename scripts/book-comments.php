@@ -46,7 +46,7 @@ foreach ($data->readings as $reading) {
 
           // Create a permalink URL that persists after our highlight merging.
           // (Some values become inaccessible when things are merged together.)
-          $comment->permalink_url = 'http://readmill.com/' . $comment->user->username
+          $comment->permalink_url = 'http://readmill.com/' . $highlight->user->username
             . '/reads/' . $data->book->permalink . '/highlights/' . $highlight->permalink;
         }
 
@@ -104,7 +104,7 @@ while (count($highlights_to_merge) != 0) {
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Readmilling: Book comments</title>
+  <title>Book comments for <?php print $data->book->title; ?> - Readmilling</title>
   <link rel="stylesheet" href="../misc/default.css" />
 </head>
 <body>
@@ -138,7 +138,9 @@ while (count($highlights_to_merge) != 0) {
                 print   '<section class="comments">';
                 foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
-                  print     '<a href="' . $comment->user->permalink_url . '" class="image"><img src="' . $comment->user->avatar_url . '" alt="' . $comment->user->fullname . '" /></a>';
+                  print     '<a href="' . $comment->user->permalink_url . '" class="image">';
+                  print       '<img src="' . $comment->user->avatar_url . '" alt="' . $comment->user->fullname . '" />';
+                  print     '</a>';
                   print     '<div class="content">'; // Display the comment as one single paragraph, even if it has lovable newlines of its own.
                   print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
                   print       '<p>' . $comment->content . '</p>';

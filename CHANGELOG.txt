@@ -2,8 +2,8 @@ BUGS AND TODOS
 --------------
   * @todo Add an actual book selector to book-comments.php with errors, etc.
   * @todo add closing comments
-  * @todo Susanne Stage's :) comment isn't linking correctly.
   * @todo add a no_merging=1 flag for debugging/example purposes.
+  * @todo index.html, readme, goldplaty crap.
 
 VERSION 0.1, 2013-XX-XX
 -----------------------
