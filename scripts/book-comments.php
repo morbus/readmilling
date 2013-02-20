@@ -79,7 +79,7 @@ while (count($highlights_to_merge) != 0) {
     //   https://readmill.com/challberg/reads/html5-for-web-designers/highlights/6fd8
     //   https://readmill.com/vasilis/reads/html5-for-web-designers/highlights/117d
     //   https://readmill.com/asia/reads/html5-for-web-designers/highlights/2rasra
-    $smallest_highlight_string = substr_replace($smallest_highlight['highlight']->content, "", -1);
+    $smallest_highlight_string = substr_replace($smallest_highlight['highlight']->content, '', -1);
 
     if (strpos($highlight['highlight']->content, $smallest_highlight_string) !== FALSE) {
       // A match!: We've a smaller highlight that is a snippet of a bigger one.
@@ -110,7 +110,7 @@ while (count($highlights_to_merge) != 0) {
 <body>
   <header class="page-toolbar toolbar">
     <div class="container">
-      <a href="/" class="readmill-logo">Readmill</a>
+      <a href="http://readmill.com/" class="readmill-logo">Readmill</a>
       <div class="readmilling-explanation">
         <a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is
         a collection of scripts for use with <a href="http://readmill.com/">Readmill's</a>
@@ -167,15 +167,14 @@ while (count($highlights_to_merge) != 0) {
         </section>
         <section class="secondary-section">
           <h1>About this script</h1>
-          <p><b>book-comments.php</b> tries to merge all comments left on similar
+          <p>book-comments.php tries to merge all comments left on similar
           highlights into a single entry. Different versions of the same book can
           have highlights in different locations, so the script can't guarantee
           the merged entries are in the same order they appear in the text. (The
-          script doesn't have access to the book file&mdash;we can't check
+          script doesn't have the ebook file&mdash;we can't check
           for the right order.)</p>
         </section>
         @todo add book selector.
-        @todo add donation button
       </div>
     </aside>
   </div>

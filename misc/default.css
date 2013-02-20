@@ -2,6 +2,18 @@
  * @file
  * Default Readmilling styles.
  */
+@charset "UTF-8";
+
+@font-face{
+  font-family: "Scala Sans SC";
+  font-style: normal;
+  font-weight: normal;
+  src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-f75fdf1f8d80fcefcde6d5ddc3499e2f.eot');
+  src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont.eot?#iefix') format("embedded-opentype"),
+       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-e05fe652c62b4441ca4bc4fbb49ef5f2.woff') format("woff"),
+       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-e1bb0eaacf507b98abedadd0e35b9a74.ttf') format("truetype"),
+       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont.svg#webfontFFDkSr83') format("svg");
+}
 
 @font-face {
   font-family: "Scala";
@@ -23,28 +35,6 @@
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont-85981446788c54e7abf99d0dbfd9e543.woff') format("woff"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont-e15f4ae34236c7885a55620eb75cccab.ttf') format("truetype"),
        url('//d15fum6h02z48v.cloudfront.net/assets/scala-italic-webfont.svg#webfontlIRgPCMX') format("svg");
-}
-
-@font-face {
-  font-family: "Scala";
-  font-style: normal;
-  font-weight: bold;
-  src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-54c96cbf459f9418b19da7920d8d4780.eot');
-  src: url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont.eot?#iefix') format("embedded-opentype"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-35ae67e8080d81eebf98e9d85d907ba8.woff') format("woff"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont-37a8923e885eb70e67c0e8d7ecb989ef.ttf') format("truetype"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scala-webfont.svg#webfontCQuAe3BJ') format("svg");
-}
-
-@font-face{
-  font-family: "Scala Sans SC";
-  font-style: normal;
-  font-weight: normal;
-  src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-f75fdf1f8d80fcefcde6d5ddc3499e2f.eot');
-  src: url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont.eot?#iefix') format("embedded-opentype"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-e05fe652c62b4441ca4bc4fbb49ef5f2.woff') format("woff"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont-e1bb0eaacf507b98abedadd0e35b9a74.ttf') format("truetype"),
-       url('//d15fum6h02z48v.cloudfront.net/assets/scalasans-regularsc-webfont.svg#webfontFFDkSr83') format("svg");
 }
 
 html {
