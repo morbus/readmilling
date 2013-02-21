@@ -1,6 +1,7 @@
 <?php
 
 include_once('../settings.php');
+date_default_timezone_set('GMT');
 
 /**
  * Retrieve a book from the Readmill API.
