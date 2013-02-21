@@ -234,6 +234,9 @@ function readmill_request($resource, $params = array()) {
 function http_request($url, $params = array()) {
   require_once('HTTP/Request2.php');
   $request = new HTTP_Request2($url);
+  $request->setConfig(array(
+    'ssl_verify_peer' => FALSE,
+  ));
 
   if ($params) {
     $url = $request->getUrl();
