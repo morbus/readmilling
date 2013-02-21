@@ -2,7 +2,7 @@
 
 /**
  * @file
- * @todo
+ * Attempt to merge all comments on similar highlights into a single entry.
  */
 
 include_once("../includes/common.inc");
@@ -138,14 +138,14 @@ while (count($highlights_to_merge) != 0) {
     <div class="container">
       <div class="readmilling-explanation">
         <a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is
-        a collection of scripts for use with <a href="http://readmill.com/">Readmill's</a>
-        <a href="http://developers.readmill.com/">API</a>. Created by <a href="http://www.disobey.com/">Morbus Iff</a>.
+        a <a href="https://github.com/morbus/readmilling">collection of scripts</a> for use with
+        <a href="http://readmill.com/">Readmill's</a> API. Created by <a href="http://www.disobey.com/">Morbus Iff</a>.
         <span class="backpedaling">These scripts are not affiliated with or created by the fine chaps and chapettes at Readmill.com.</span>
       </div>
     </div>
   </header>
 
-  <div class="page-content container" role="main">
+  <div class="page-content container">
     <?php print $errors ? $errors : NULL; ?>
     <section class="layout-primary">
       <div class="layout-primary-column">
@@ -202,10 +202,9 @@ while (count($highlights_to_merge) != 0) {
         </section>
         <section class="secondary-section">
           <h1>About this script</h1>
-          <p>book-comments.php tries to merge all comments left on similar highlights into a single entry.
-          Different versions of the same book can have highlights in different locations, so the script
-          can't guarantee the merged entries are in the same order they appear in the text. (The script
-          doesn't have the ebook file&mdash;we can't check for the right order.)</p>
+          <p><b>Book comments</b> tries to merge all comments left on similar highlights into a single
+          entry. Different versions of the same book can have highlights in different locations, so the
+          script can't guarantee the merged entries are in the same order they appear in the text.</p>
         </section>
       </div>
     </aside>
