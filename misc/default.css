@@ -57,6 +57,56 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: normal;
 }
 
+form label {
+  display: block;
+  font-family: "Scala Sans SC", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  margin: 0 0 3px 0;
+  text-transform: lowercase;
+  -webkit-font-smoothing: antialiased;
+}
+
+form input {
+  background-color: white
+  display: block;
+  font-family: Scala, Georgia, Times, serif;
+  font-size: 14px;
+  line-height: 16px;
+  height: 18px;
+  margin-bottom: 15px;
+  padding: 7px;
+  vertical-align: middle;
+  width: 93%;
+  border: 1px solid #cccbc2;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+form button {
+  float: right;
+}
+
+form button, form button:visited {
+  background-color: #70b32d;
+  color: white;
+  font-family: "Scala Sans SC", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-variant: normal;
+  line-height: 1.25;
+  padding: 3px 10px;
+  text-align: center;
+  text-transform: lowercase;
+  border: 1px solid #70b32d;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+form.button::after {
+  clear: both;
+}
+
 .toolbar {
   background-color: #052336;
   color: #fff;
@@ -79,25 +129,30 @@ h1, h2, h3, h4, h5, h6 {
   width: 980px;
 }
 
-.readmill-logo {
-  background: transparent url('//d15fum6h02z48v.cloudfront.net/assets/logo-a5782e134b66a3ba2ab6e0104a2a859f.png') no-repeat 0 0;
-  background-position: 0 11px;
-  background-size: 112px 30px;
-  display: block;
-  float: left;
-  height: 48px;
-  text-indent: -900em;
-  width: 127px;
+.readmilling-explanation {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.readmilling-explanation {
-  float: right;
-  margin-top: 13px;
+.readmilling-explanation .backpedaling {
+  display: block;
+  font-size: smaller;
 }
 
 .page-content {
   background: #fff;
   overflow: hidden;
+}
+
+.errors {
+  background-color: red;
+  color: white;
+  font-family: "Scala Sans SC", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .layout-primary {
@@ -233,7 +288,7 @@ article.comment aside {
 
 footer .container {
   font-size: 14px;
-  padding: 12px 0 30px;
+  padding: 12px 0 20px;
   text-align: right;
 }
 

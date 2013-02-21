@@ -1,9 +1,14 @@
 BUGS AND TODOS
 --------------
-  * @todo Add an actual book selector to book-comments.php with errors, etc.
   * @todo add closing comments
   * @todo add a no_merging=1 flag for debugging/example purposes.
   * @todo index.html, readme, goldplaty crap.
+  * @todo there's a white line/border on the sidebar. remove.
+
+  * @todo export script
+  * @todo this day in readmill script
+  * @todo advanced search engine
+
 
 VERSION 0.1, 2013-XX-XX
 -----------------------

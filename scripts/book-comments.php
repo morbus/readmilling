@@ -7,13 +7,39 @@
 
 include_once("../includes/common.inc");
 
+// Provide representational defaults.
+$default_match_title  = 'HTML5 for Web Designers';
+$default_match_author = 'Jeremy Keith';
+$match_title  = $default_match_title;
+$match_author = $default_match_author;
+
+// Override the defaults if we've been passed user data.
+$errors = array(); // ALL THE INPUTS DAMN IT ALL THE INPUTS.
+if (!empty($_REQUEST['title']) && empty($_REQUEST['author'])
+   || !empty($_REQUEST['author']) && empty($_REQUEST['title'])) {
+  $errors[] = 'Book title and author are both required.';
+}
+elseif (!empty($_REQUEST['title']) && !empty($_REQUEST['author'])) {
+  $match_title  = $_REQUEST['title'];
+  $match_author = $_REQUEST['author'];
+}
+
+// Grab *something*.
 $data = new stdClass;
 $data->book = readmill_book('match', array(
-  'title'   => 'HTML5 for Web Designers',
-  'author'  => 'Jeremy Keith',
+  'title'   => $match_title,
+  'author'  => $match_author,
 ));
-if (!$data->book) {
-  // @todo
+if (!$data->book) { // Fallback to a known and working example.
+  $errors[] = 'The requested book could not be found.';
+  $data->book = readmill_book('match', array(
+    'title'   => $default_match_title,
+    'author'  => $default_match_author,
+  ));
+}
+
+if (count($errors)) { // Transmogrificate any errors into a renderable string.
+  $errors = '<ul class="errors"><li>' . implode('</li><li>', $errors) . '</li></ul>';
 }
 
 // Fetch all the readings for this book. We're interested in readings
@@ -110,16 +136,17 @@ while (count($highlights_to_merge) != 0) {
 <body>
   <header class="page-toolbar toolbar">
     <div class="container">
-      <a href="http://readmill.com/" class="readmill-logo">Readmill</a>
       <div class="readmilling-explanation">
         <a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is
         a collection of scripts for use with <a href="http://readmill.com/">Readmill's</a>
         <a href="http://developers.readmill.com/">API</a>. Created by <a href="http://www.disobey.com/">Morbus Iff</a>.
+        <span class="backpedaling">These scripts are not affiliated with or created by the fine chaps and chapettes at Readmill.com.</span>
       </div>
     </div>
   </header>
 
   <div class="page-content container" role="main">
+    <?php print $errors ? $errors : NULL; ?>
     <section class="layout-primary">
       <div class="layout-primary-column">
         <header>
@@ -166,15 +193,20 @@ while (count($highlights_to_merge) != 0) {
           <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
         </section>
         <section class="secondary-section">
-          <h1>About this script</h1>
-          <p>book-comments.php tries to merge all comments left on similar
-          highlights into a single entry. Different versions of the same book can
-          have highlights in different locations, so the script can't guarantee
-          the merged entries are in the same order they appear in the text. (The
-          script doesn't have the ebook file&mdash;we can't check
-          for the right order.)</p>
+          <form action="book-comments.php" accept-charset="UTF-8" method="get">
+            <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title); ?>" required />
+            <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author); ?>" required />
+            <button>Load book</button>
+          </form>
+          <span class="warning"><strong>Be aware:</strong> If we've not seen this book before, or its data has expired, it might take 30 seconds or more before you'll get results.</span>
         </section>
-        @todo add book selector.
+        <section class="secondary-section">
+          <h1>About this script</h1>
+          <p>book-comments.php tries to merge all comments left on similar highlights into a single entry.
+          Different versions of the same book can have highlights in different locations, so the script
+          can't guarantee the merged entries are in the same order they appear in the text. (The script
+          doesn't have the ebook file&mdash;we can't check for the right order.)</p>
+        </section>
       </div>
     </aside>
   </div>

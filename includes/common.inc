@@ -15,7 +15,7 @@ include_once('../settings.php');
  */
 function readmill_book($type = 'match', $params = array()) {
   $result = readmill_request('books/match', $params);
-  if ($result->status == 200) {
+  if (isset($result->status) && $result->status == 200) {
     return $result->book;
   }
 
@@ -61,7 +61,7 @@ function readmill_book_readings($book_id) {
   while ($found_all_readings == 0) {
     $readings = readmill_request('books/' . $book_id . '/readings', $readings_params);
 
-    if ($readings->status == 200) {
+    if (isset($readings->status) && $readings->status == 200) {
       foreach ($readings->items as $reading) {
         $all_readings[$reading->reading->id] = $reading->reading;
 
@@ -115,7 +115,7 @@ function readmill_reading_highlights($reading_id) {
   while ($found_all_highlights == 0) {
     $highlights = readmill_request('readings/' . $reading_id . '/highlights', $highlights_params);
 
-    if ($highlights->status == 200) {
+    if (isset($highlights->status) && $highlights->status == 200) {
       foreach ($highlights->items as $highlight) {
         $all_highlights[$highlight->highlight->id] = $highlight->highlight;
 
@@ -169,7 +169,7 @@ function readmill_highlight_comments($highlight_id) {
   while ($found_all_comments == 0) {
     $comments = readmill_request('highlights/' . $highlight_id . '/comments', $comments_params);
 
-    if ($comments->status == 200) {
+    if (isset($comments->status) && $comments->status == 200) {
       foreach ($comments->items as $comment) {
         $all_comments[$comment->comment->id] = $comment->comment;
 
