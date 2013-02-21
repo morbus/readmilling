@@ -240,6 +240,8 @@ function http_request($url, $params = array()) {
     $url->setQueryVariables($params);
   }
 
+  error_log("Readmilling request: $url");
+
   try {
     $response = $request->send();
     if ($response->getStatus() == 200) {

@@ -23,8 +23,8 @@ chapettes at Readmill.com.
 
 Found bugs or have a request? Like 'em and want to give thanks?
 
-  Twitter:                  https://twitter.com/morbusiff
   Email:                    morbus@disobey.com
+  Twitter:                  https://twitter.com/morbusiff
   Amazon wishlist:          http://www.amazon.com/gp/registry/25USVJDH68554
 
 
