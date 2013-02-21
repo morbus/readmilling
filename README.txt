@@ -56,9 +56,13 @@ else tweak Readmilling's code, you'll need your own installation with:
  * A Readmill API key from http://developers.readmill.com/
  * A web server with support for PHP scripts.
 
-Grab the source from https://github.com/morbus/readmilling, throw your API
-key into the settings.php (or settings.local.php), and you should then be
-able to access index.html and any of the scripts from scripts/.
+Grab the source from https://github.com/morbus/readmilling, then:
+
+ * Specify your API key into the settings.php (or settings.local.php).
+ * Create a directory called cache/ in the root of the Readmilling source.
+ * Give your webserver permission to write to this cache/ directory.
+
+You should now be able to access index.html and the scripts from scripts/.
 
 Don't hesitate to email morbus@disobey.com with further questions.
 
