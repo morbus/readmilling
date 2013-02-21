@@ -161,7 +161,7 @@ while (count($highlights_to_merge) != 0) {
             foreach ($data->highlights as $position => $highlights) {
               foreach ($highlights as $highlight_id => $highlight) {
                 print '<article class="highlight">';
-                print   '<blockquote>' . htmlentities($highlight['highlight']->content) . '</blockquote>';
+                print   '<blockquote>' . htmlentities($highlight['highlight']->content, ENT_COMPAT, "UTF-8") . '</blockquote>';
                 print   '<section class="comments">';
                 foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
@@ -170,7 +170,7 @@ while (count($highlights_to_merge) != 0) {
                   print     '</a>';
                   print     '<div class="content">'; // Display the comment as one single paragraph, even if it has lovable newlines of its own.
                   print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
-                  print       '<p>' . $comment->content . '</p>';
+                  print       '<p>' . htmlentities($comment->content, ENT_COMPAT, "UTF-8") . '</p>';
                   print       '<aside class="metadata">';
                   print         '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y', $timestamp) . '</time> &middot; ';
                   print         '<a href="' . $comment->permalink_url . '">Reply to comment</a>';
@@ -194,8 +194,8 @@ while (count($highlights_to_merge) != 0) {
         </section>
         <section class="secondary-section">
           <form action="book-comments.php" accept-charset="UTF-8" method="get">
-            <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title); ?>" required />
-            <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author); ?>" required />
+            <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title, ENT_COMPAT, "UTF-8"); ?>" required />
+            <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
           <span class="warning"><strong>Be aware:</strong> If we've not seen this book before, or its data has expired, it might take 30 seconds or more before you'll get results.</span>
