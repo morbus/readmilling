@@ -283,8 +283,8 @@ article.comment aside {
 .layout-secondary {
   background-color: #f4f5f3;
   border-left: 1px solid #e6e6e6;
-  margin-bottom: -2000em;
-  padding-bottom: 2000em;
+  margin-bottom: -10000em;
+  padding-bottom: 10000em;
   float: left;
   width: 239px;
 }

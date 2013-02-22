@@ -113,7 +113,8 @@ function readmill_reading_highlights($reading_id) {
     'count'       => 100,
   );
 
-  while ($found_all_highlights == 0) {
+  // @bug See CHANGELOG.txt re: "to".
+  // while ($found_all_highlights == 0) {
     $highlights = readmill_request('readings/' . $reading_id . '/highlights', $highlights_params);
 
     if (isset($highlights->status) && $highlights->status == 200) {
@@ -131,7 +132,7 @@ function readmill_reading_highlights($reading_id) {
         $found_all_highlights = 1;
       }
     }
-  }
+  // }
 
   // Cache it for faster futures, Seldon.
   @mkdir('../cache/reading-highlights/', 0755, TRUE);

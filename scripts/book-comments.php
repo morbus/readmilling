@@ -60,8 +60,9 @@ foreach ($data->readings as $reading) {
 
         // Store the highlight indexed at the highlight position. This allows us
         // to do a quick key sort to put all highlights in the order they were
-        // positioned in the book (approximately, given multiple book formats).
-        $position = (string) $highlight->locators->position;
+        // positioned in the book (approximately, given multiple book formats). No GPS? End of the line.
+        $highlight->locators->position = isset($highlight->locators->position) ? $highlight->locators->position : 9999;
+        $position = (string) $highlight->locators->position; // String 'em so positions like 0.123 and 0.234 aren't merged.
         $data->highlights[$position][$highlight->id]['highlight'] = $highlight;
 
         foreach ($comments as $comment) {
@@ -162,7 +163,7 @@ while (count($highlights_to_merge) != 0) {
               foreach ($highlights as $highlight_id => $highlight) {
                 print '<article class="highlight">';
                 print   '<blockquote>' . htmlentities($highlight['highlight']->content, ENT_COMPAT, "UTF-8") . '</blockquote>';
-                print   '<section class="comments">';
+                print   '<section class="comments">'; // Be sure to enforce UTF-8 on all htmlentities() due to PHP 5.3 defaults.
                 foreach ($highlight['comments'] as $timestamp => $comment) {
                   print   '<article class="comment">';
                   print     '<a href="' . $comment->user->permalink_url . '" class="image">';
