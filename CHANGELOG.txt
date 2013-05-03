@@ -5,14 +5,19 @@ general:
   * @todo export script
   * @todo this day in readmill script
   * @todo advanced search engine
-  * @bug "to" support doesn't work for readings/:id/highlights, so we've
-      commented out the infinite loop in readmill_reading_highlights() for
-      now, meaning at most we'll at most get 100 highlights per reading.
+  * @bug center small book images: http://www.disobey.com/detergent/code/readmilling/scripts/book-comments.php?title=accelerando&author=charles+stross
 
 book-comments.php:
   * @todo add closing comments
   * @todo add a no_merging=1 flag for debugging/example purposes.
 
+book-updates.php:
+
+
+
+VERSION 0.2, 2013-XX-XX
+-----------------------
+  * Fetch all highlights per reading, not just the first 100.
 
 VERSION 0.1, 2013-02-22
 -----------------------

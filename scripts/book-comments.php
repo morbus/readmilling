@@ -68,13 +68,13 @@ foreach ($data->readings as $reading) {
         foreach ($comments as $comment) {
           $timestamp = strtotime($comment->posted_at);
 
-          // Store the comment keyed to timestamp for re-sorting after highlight merge.
-          $data->highlights[$position][$highlight->id]['comments'][$timestamp] = $comment;
-
           // Create a permalink URL that persists after our highlight merging.
           // (Some values become inaccessible when things are merged together.)
           $comment->permalink_url = 'http://readmill.com/' . $highlight->user->username
             . '/reads/' . $data->book->permalink . '/highlights/' . $highlight->permalink;
+
+          // Store the comment keyed to timestamp for re-sorting after highlight merge.
+          $data->highlights[$position][$highlight->id]['comments'][$timestamp] = $comment;
         }
 
         // Duplicate our highlight storage, but by highlight length, for potential merging below.
