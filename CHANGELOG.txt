@@ -12,12 +12,18 @@ book-comments.php:
   * @todo add a no_merging=1 flag for debugging/example purposes.
 
 book-updates.php:
-
+  * @todo add to changelog
+  * @todo add to front page
+  * @todo write up sidebar intro
+  * @todo add RSS export
+  * @todo add closing comments
+  * @todo add ignore-cache code
 
 
 VERSION 0.2, 2013-XX-XX
 -----------------------
   * Fetch all highlights per reading, not just the first 100.
+
 
 VERSION 0.1, 2013-02-22
 -----------------------
