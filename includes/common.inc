@@ -37,15 +37,17 @@ function readmill_book($type = 'match', $params = array()) {
  *
  * @param $book_id
  *   The book ID to return readings for.
+ * @param $reset
+ *   Whether to reset the cache or not.
  *
  * @return
  *   An array of all readings for this book.
  */
-function readmill_book_readings($book_id) {
+function readmill_book_readings($book_id, $reset = FALSE) {
   $cache_file = "../cache/book-readings/$book_id.json";
 
   // If our cache is fresh enough per our configuration, use that.
-  if (file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['book_readings'])) {
+  if (!$reset && file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['book_readings'])) {
     return json_decode(file_get_contents($cache_file));
   }
 
@@ -91,15 +93,17 @@ function readmill_book_readings($book_id) {
  *
  * @param $reading_id
  *   The reading ID to return highlights for.
+ * @param $reset
+ *   Whether to reset the cache or not.
  *
  * @return
  *   An array of all highlights for this reading.
  */
-function readmill_reading_highlights($reading_id) {
+function readmill_reading_highlights($reading_id, $reset = FALSE) {
   $cache_file = "../cache/reading-highlights/$reading_id.json";
 
   // If our cache is fresh enough per our configuration, use that.
-  if (file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['reading_highlights'])) {
+  if (!$reset && file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['reading_highlights'])) {
     return json_decode(file_get_contents($cache_file));
   }
 
@@ -145,15 +149,17 @@ function readmill_reading_highlights($reading_id) {
  *
  * @param $highlight_id
  *   The highlight ID to return comments for.
+ * @param $reset
+ *   Whether to reset the cache or not.
  *
  * @return
  *   An array of all comments for this highlight.
  */
-function readmill_highlight_comments($highlight_id) {
+function readmill_highlight_comments($highlight_id, $reset = FALSE) {
   $cache_file = "../cache/highlight-comments/$highlight_id.json";
 
   // If our cache is fresh enough per our configuration, use that.
-  if (file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['highlight_comments'])) {
+  if (!$reset && file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['highlight_comments'])) {
     return json_decode(file_get_contents($cache_file));
   }
 
