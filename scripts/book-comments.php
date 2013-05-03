@@ -173,7 +173,7 @@ while (count($highlights_to_merge) != 0) {
                   print       '<a href="' . $comment->user->permalink_url . '" class="fullname">' . $comment->user->fullname . '</a> ';
                   print       '<p>' . htmlentities($comment->content, ENT_COMPAT, "UTF-8") . '</p>';
                   print       '<aside class="metadata">';
-                  print         '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y', $timestamp) . '</time> &middot; ';
+                  print         '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y h:i:s a', $timestamp) . '</time> &middot; ';
                   print         '<a href="' . $comment->permalink_url . '">Reply to comment</a>';
                   print       '</aside>';
                   print     '</div>';
