@@ -53,37 +53,43 @@ foreach ($data->readings as $reading) {
     $highlights = readmill_reading_highlights($reading->id);
 
     foreach ($highlights as $highlight) {
-      $data->updates[strtotime($highlight->highlighted_at)][] = array(
-        'highlight' => $highlight,
-      );
-
       if ($highlight->comments_count >= 1) {
         $comments = readmill_highlight_comments($highlight->id);
 
         foreach ($comments as $comment) {
-          // Create a permalink URL that persists after our highlight merging.
-          // (Some values become inaccessible when things are merged together.)
-          $comment->permalink_url = 'http://readmill.com/' . $highlight->user->username
-            . '/reads/' . $data->book->permalink . '/highlights/' . $highlight->permalink;
-
           $data->updates[strtotime($comment->posted_at)][] = array(
-            'type'      => 'comment',
-            'highlight' => $highlight,
-            'comment'   => $comment,
+            'user'            => $comment->user,
+            'highlight'       => $highlight,
+            'comment'         => $comment,
+            'content'         => htmlentities($comment->content, ENT_COMPAT, "UTF-8"),
+            'permalink_url'   => 'http://readmill.com/' . $highlight->user->username
+                                  . '/reads/' . $data->book->permalink . '/highlights/'
+                                  . $highlight->permalink,
+            'permalink_text'  => 'Reply to comment',
           );
         }
+      }
+      else { // No comment was left, just a happy highlight.
+        $data->updates[strtotime($highlight->highlighted_at)][] = array(
+          'user'            => $highlight->user,
+          'highlight'       => $highlight,
+          'content'         => 'shared a highlight.',
+          'permalink_url'   => $highlight->permalink_url,
+          'permalink_text'  => 'View highlight',
+        );
       }
     }
   }
 }
 
 krsort($data->updates);
+$data->updates = array_slice($data->updates, 0, 50, TRUE);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Book comments for <?php print $data->book->title; ?> - Readmilling</title>
+  <title>Book updates for <?php print $data->book->title; ?> - Readmilling</title>
   <link rel="stylesheet" href="../misc/default.css" />
 </head>
 <body>
@@ -109,7 +115,7 @@ krsort($data->updates);
           </h1>
         </header>
         <section id="highlights">
-          <h1>Updates</h1>
+          <h1>Latest updates</h1>
           <?php
             foreach ($data->updates as $timestamp => $updates) {
               foreach ($updates as $update) {
@@ -117,15 +123,15 @@ krsort($data->updates);
                 print   '<blockquote>' . htmlentities($update['highlight']->content, ENT_COMPAT, "UTF-8") . '</blockquote>';
                 print   '<section class="comments">'; // Be sure to enforce UTF-8 on all htmlentities() due to PHP 5.3 defaults.
                 print     '<article class="comment">';
-                print       '<a href="' . $update['comment']->user->permalink_url . '" class="image">';
-                print         '<img src="' . $update['comment']->user->avatar_url . '" alt="' . $update['comment']->user->fullname . '" />';
+                print       '<a href="' . $update['user']->permalink_url . '" class="image">';
+                print         '<img src="' . $update['user']->avatar_url . '" alt="' . $update['user']->fullname . '" />';
                 print       '</a>';
-                print       '<div class="content">'; // Display the comment as one single paragraph, even if it has lovable newlines of its own.
-                print         '<a href="' . $update['comment']->user->permalink_url . '" class="fullname">' . $update['comment']->user->fullname . '</a> ';
-                print         '<p>' . htmlentities($update['comment']->content, ENT_COMPAT, "UTF-8") . '</p>';
+                print       '<div class="content">';
+                print         '<a href="' . $update['user']->permalink_url . '" class="fullname">' . $update['user']->fullname . '</a> ';
+                print         '<p>' . $update['content'] . '</p>';
                 print         '<aside class="metadata">';
-                print           '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y', $timestamp) . '</time> &middot; ';
-                print           '<a href="' . $update['comment']->permalink_url . '">Reply to comment</a>';
+                print           '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y h:i:s a', $timestamp) . '</time> &middot; ';
+                print           '<a href="' . $update['permalink_url'] . '">' . $update['permalink_text'] . '</a>';
                 print         '</aside>';
                 print       '</div>';
                 print     '</article>';
@@ -144,7 +150,7 @@ krsort($data->updates);
           <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
         </section>
         <section class="secondary-section">
-          <form action="book-comments.php" accept-charset="UTF-8" method="get">
+          <form action="book-updates.php" accept-charset="UTF-8" method="get">
             <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title, ENT_COMPAT, "UTF-8"); ?>" required />
             <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
