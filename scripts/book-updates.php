@@ -44,16 +44,16 @@ if (count($errors)) { // Transmogrificate any errors into a renderable string.
 
 // Fetch all the readings for this book. We're interested in readings
 // with highlights (and comments), but we also want closing_remarks.
-$data->readings = readmill_book_readings($data->book->id, TRUE);
+$data->readings = readmill_book_readings($data->book->id);
 
 // For every reading, fetch all the highlights and comments.
 foreach ($data->readings as $reading) {
   if ($reading->highlights_count >= 1) {
-    $highlights = readmill_reading_highlights($reading->id, TRUE);
+    $highlights = readmill_reading_highlights($reading->id);
 
     foreach ($highlights as $highlight) {
       if ($highlight->comments_count >= 1) {
-        $comments = readmill_highlight_comments($highlight->id, TRUE);
+        $comments = readmill_highlight_comments($highlight->id);
 
         foreach ($comments as $comment) {
           $data->updates[strtotime($comment->posted_at)][] = array(

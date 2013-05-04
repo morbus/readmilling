@@ -16,7 +16,7 @@ book-updates.php:
   * @todo rewrite form warning about no-cache.
   * @todo add to front page
   * @todo write up sidebar intro
-  * @todo add RSS export
+  * @todo add RSS export and icon/sniff thing.
   * @todo add closing comments
 
 
@@ -24,6 +24,7 @@ VERSION 0.2, 2013-XX-XX
 -----------------------
   * Fetch all highlights per reading, not just the first 100.
   * Scripts can now (dangerously) ignore caching for certain requests.
+  * All caches default to expiring after one day. We’ll try it out.
 
 
 VERSION 0.1, 2013-02-22
