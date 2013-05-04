@@ -90,9 +90,9 @@ $data->updates = array_slice($data->updates, 0, 50, TRUE);
 if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
-  print   '<title>Readmilling book updates for ' . $data->book->title . '</title>';
-  print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] .'" rel="self" type="application/rss+xml" />';
-  print   '<link>http://' . $_SERVER['HTTP_HOST'] . preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI']) . '</link>';
+  print   '<title>Readmilling book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '</title>';
+  print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']) .'" rel="self" type="application/rss+xml" />';
+  print   '<link>http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars(preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI'])) . '</link>';
   print   '<description>@todo</description>';
   print   '<language>en</language>';
   foreach ($data->updates as $timestamp => $updates) {
@@ -100,9 +100,9 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
       print '<item>'; // SORT BY LENGTH, G-STRINGS HO!
       print   '<link>' . $update['permalink_url'] . '</link>';
       print   '<pubDate>' . date(DATE_RFC2822, $timestamp) . '</pubDate>';
-      print   '<title>' . $update['user']->fullname . ' ' . $update['action'] . '</title>';
+      print   '<title>' . htmlspecialchars($update['user']->fullname, ENT_COMPAT, "UTF-8") . ' ' . $update['action'] . '</title>';
       print   '<description>' . htmlspecialchars($update['content'], ENT_COMPAT, "UTF-8") . '</description>';
-      print   '<guid isPermaLink="false">' . date(DATE_RFC2822, $timestamp) . '--' . $update['permalink_url'] . '</guid>';
+      print   '<guid isPermaLink="false">' . date(DATE_RFC2822, $timestamp) . ' @ ' . $update['permalink_url'] . '</guid>';
       print '</item>';
     }
   }
