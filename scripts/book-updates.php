@@ -60,6 +60,7 @@ foreach ($data->readings as $reading) {
             'user'            => $comment->user,
             'highlight'       => $highlight,
             'comment'         => $comment,
+            'action'          => 'left a comment',
             'content'         => htmlentities($comment->content, ENT_COMPAT, "UTF-8"),
             'permalink_url'   => 'http://readmill.com/' . $highlight->user->username
                                   . '/reads/' . $data->book->permalink . '/highlights/'
@@ -72,6 +73,7 @@ foreach ($data->readings as $reading) {
         $data->updates[strtotime($highlight->highlighted_at)][] = array(
           'user'            => $highlight->user,
           'highlight'       => $highlight,
+          'action'          => 'shared a highlight',
           'content'         => 'shared a highlight.',
           'permalink_url'   => $highlight->permalink_url,
           'permalink_text'  => 'View highlight',
@@ -83,6 +85,28 @@ foreach ($data->readings as $reading) {
 
 krsort($data->updates); // Spit out only the latest 50.
 $data->updates = array_slice($data->updates, 0, 50, TRUE);
+
+// Want RSS? HAVE MANUALLY WRTITEN RSS OOOOH YEAAAAAHH.
+if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
+  print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+  print '<rss version="2.0"><channel>';
+  print   '<title>Readmilling book updates for ' . $data->book->title . '</title>';
+  print   '<link>http://' . $_SERVER['HTTP_HOST'] . preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI']) . '</link>';
+  print   '<description>@todo</description>';
+  print   '<language>en</language>';
+  foreach ($data->updates as $timestamp => $updates) {
+    foreach ($updates as $update) {
+      print '<item>';
+      print   '<title>' . $update['user']->fullname . ' ' . $update['action'] . '</title>';
+      print   '<link>' . $update['permalink_url'] . '</link>';
+      print   '<description>' . $update['content'] . '</description>';
+      print   '<pubDate>' . date(DATE_RFC2822, $timestamp) . '</pubDate>';
+      print '</item>';
+    }
+  }
+  print '</channel></rss>';
+  exit; // OH NOESA WINER WINS.
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -154,7 +178,7 @@ $data->updates = array_slice($data->updates, 0, 50, TRUE);
             <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
-          <span class="warning"><strong>Be aware:</strong> If we've not seen this book before, or its data has expired, it might take 30 seconds or more before you'll get results.</span>
+          <span class="warning"><strong>Be aware:</strong> @todo</span>
         </section>
         <section class="secondary-section">
           <h1>About this script</h1>
