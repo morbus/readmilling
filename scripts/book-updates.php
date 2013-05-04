@@ -101,7 +101,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
       print   '<link>' . $update['permalink_url'] . '</link>';
       print   '<pubDate>' . date(DATE_RFC2822, $timestamp) . '</pubDate>';
       print   '<title>' . $update['user']->fullname . ' ' . $update['action'] . '</title>';
-      print   '<description>' . htmlentities($update['content'], ENT_XML1, "UTF-8") . '</description>';
+      print   '<description>' . htmlspecialchars($update['content'], ENT_COMPAT, "UTF-8") . '</description>';
       print   '<guid isPermaLink="false">' . date(DATE_RFC2822, $timestamp) . '--' . $update['permalink_url'] . '</guid>';
       print '</item>';
     }
