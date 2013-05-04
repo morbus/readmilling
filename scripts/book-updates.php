@@ -61,7 +61,7 @@ foreach ($data->readings as $reading) {
             'highlight'       => $highlight,
             'comment'         => $comment,
             'action'          => 'left a comment',
-            'content'         => htmlentities($comment->content, ENT_COMPAT, "UTF-8"),
+            'content'         => $comment->content,
             'permalink_url'   => 'http://readmill.com/' . $highlight->user->username
                                   . '/reads/' . $data->book->permalink . '/highlights/'
                                   . $highlight->permalink,
@@ -89,18 +89,20 @@ $data->updates = array_slice($data->updates, 0, 50, TRUE);
 // Want RSS? HAVE MANUALLY WRTITEN RSS OOOOH YEAAAAAHH.
 if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-  print '<rss version="2.0"><channel>';
+  print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
   print   '<title>Readmilling book updates for ' . $data->book->title . '</title>';
+  print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] .'" rel="self" type="application/rss+xml" />';
   print   '<link>http://' . $_SERVER['HTTP_HOST'] . preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI']) . '</link>';
   print   '<description>@todo</description>';
   print   '<language>en</language>';
   foreach ($data->updates as $timestamp => $updates) {
     foreach ($updates as $update) {
-      print '<item>';
-      print   '<title>' . $update['user']->fullname . ' ' . $update['action'] . '</title>';
+      print '<item>'; // SORT BY LENGTH, G-STRINGS HO!
       print   '<link>' . $update['permalink_url'] . '</link>';
-      print   '<description>' . $update['content'] . '</description>';
       print   '<pubDate>' . date(DATE_RFC2822, $timestamp) . '</pubDate>';
+      print   '<title>' . $update['user']->fullname . ' ' . $update['action'] . '</title>';
+      print   '<description>' . htmlentities($update['content'], ENT_XML1, "UTF-8") . '</description>';
+      print   '<guid isPermaLink="false">' . date(DATE_RFC2822, $timestamp) . '--' . $update['permalink_url'] . '</guid>';
       print '</item>';
     }
   }
@@ -151,7 +153,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
                 print       '</a>';
                 print       '<div class="content">';
                 print         '<a href="' . $update['user']->permalink_url . '" class="fullname">' . $update['user']->fullname . '</a> ';
-                print         '<p>' . $update['content'] . '</p>';
+                print         '<p>' . htmlentities($update['content'], ENT_COMPAT, "UTF-8") . '</p>';
                 print         '<aside class="metadata">';
                 print           '<time class="timestamp" datetime="' . date(DATE_ISO8601, $timestamp) . '">' . date('D, d M Y h:i:s a', $timestamp) . '</time> &middot; ';
                 print           '<a href="' . $update['permalink_url'] . '">' . $update['permalink_text'] . '</a>';
