@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Show the latest activity happening to a book.
+ * View the most recent highlights and comments for a book.
  */
 
 include_once("../includes/common.inc");
@@ -43,7 +43,7 @@ if (count($errors)) { // Transmogrificate any errors into a renderable string.
 }
 
 // Fetch all the readings for this book. We're interested in readings
-// with highlights (and comments), but we also want closing_remarks.
+// with highlights (and/or comments), but we also want closing_remarks.
 $data->readings = readmill_book_readings($data->book->id);
 
 // For every reading, fetch all the highlights and comments.
@@ -62,9 +62,7 @@ foreach ($data->readings as $reading) {
             'comment'         => $comment,
             'action'          => 'left a comment',
             'content'         => $comment->content,
-            'permalink_url'   => 'http://readmill.com/' . $highlight->user->username
-                                  . '/reads/' . $data->book->permalink . '/highlights/'
-                                  . $highlight->permalink,
+            'permalink_url'   => $highlight->permalink_url,
             'permalink_text'  => 'Reply to comment',
           );
         }
@@ -88,6 +86,7 @@ $data->updates = array_slice($data->updates, 0, 50, TRUE);
 
 // Want RSS? HAVE MANUALLY WRTITEN RSS OOOOH YEAAAAAHH.
 if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
+  header('Content-Type: application/rss+xml');
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
   print   '<title>Readmilling book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '</title>';
@@ -101,7 +100,10 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
       print   '<link>' . $update['permalink_url'] . '</link>';
       print   '<pubDate>' . date(DATE_RFC2822, $timestamp) . '</pubDate>';
       print   '<title>' . htmlspecialchars($update['user']->fullname, ENT_COMPAT, "UTF-8") . ' ' . $update['action'] . '</title>';
-      print   '<description>' . htmlspecialchars($update['content'], ENT_COMPAT, "UTF-8") . '</description>';
+      print   '<description>';
+      print      htmlspecialchars('<blockquote>' . $update['highlight']->content . '</blockquote>', ENT_COMPAT, "UTF-8");
+      print      isset($update['comment']) ? htmlspecialchars($update['content'], ENT_COMPAT, "UTF-8") : '';
+      print   '</description>';
       print   '<guid isPermaLink="false">' . date(DATE_RFC2822, $timestamp) . ' @ ' . $update['permalink_url'] . '</guid>';
       print '</item>';
     }
