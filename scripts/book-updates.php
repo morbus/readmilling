@@ -89,7 +89,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
   header('Content-Type: application/rss+xml');
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
-  print   '<title>Readmilling book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '</title>';
+  print   '<title>Book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '- Readmilling</title>';
   print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']) .'" rel="self" type="application/rss+xml" />';
   print   '<link>http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars(preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI'])) . '</link>';
   print   '<description>@todo</description>';
