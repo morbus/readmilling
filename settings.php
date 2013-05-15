@@ -10,6 +10,7 @@ $conf['client_id'] = 'YOUR-READMILL-CLIENT-ID';
 
 // How long API requests can be cached for.
 $conf['cache']['book_readings']      = 86400;
+$conf['cache']['user_readings']      = 86400;
 $conf['cache']['reading_highlights'] = 86400;
 $conf['cache']['highlight_comments'] = 86400;
 

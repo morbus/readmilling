@@ -26,13 +26,13 @@ elseif (!empty($_REQUEST['title']) && !empty($_REQUEST['author'])) {
 
 // Grab *something*.
 $data = new stdClass;
-$data->book = readmill_book('match', array(
+$data->book = readmill_book_match(array(
   'title'   => $match_title,
   'author'  => $match_author,
 ));
 if (!$data->book) { // Fallback to a known and working example.
   $errors[] = 'The requested book could not be found.';
-  $data->book = readmill_book('match', array(
+  $data->book = readmill_book_match(array(
     'title'   => $default_match_title,
     'author'  => $default_match_author,
   ));

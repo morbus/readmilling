@@ -2,49 +2,34 @@
 
 /**
  * @file
- * View a book's most recent highlights and comments.
+ * View a user's most recent highlights and comments.
  */
 
 include_once("../includes/common.inc");
 
-// Provide representational defaults.
-$default_match_title  = 'Service Design: From Insight to Implementation';
-$default_match_author = 'Andrew Polaine';
-$match_title  = $default_match_title;
-$match_author = $default_match_author;
+// Provide defaults.
+$default_username = 'morbus';
+$username  = !empty($_REQUEST['username'])
+  ? $_REQUEST['username'] : $default_username;
 
 // Override the defaults if we've been passed user data.
-$errors = array(); // ALL THE INPUTS DAMN IT ALL THE INPUTS.
-if (!empty($_REQUEST['title']) && empty($_REQUEST['author'])
-   || !empty($_REQUEST['author']) && empty($_REQUEST['title'])) {
-  $errors[] = 'Book title and author are both required.';
-}
-elseif (!empty($_REQUEST['title']) && !empty($_REQUEST['author'])) {
-  $match_title  = $_REQUEST['title'];
-  $match_author = $_REQUEST['author'];
-}
+$errors = array(); // YOU"VE GONE AND DONE SOMETHING FOOLISH LUCY.
 
 // Grab *something*.
 $data = new stdClass;
-$data->book = readmill_book_match(array(
-  'title'   => $match_title,
-  'author'  => $match_author,
-));
-if (!$data->book) { // Fallback to a known and working example.
-  $errors[] = 'The requested book could not be found.';
-  $data->book = readmill_book_match(array(
-    'title'   => $default_match_title,
-    'author'  => $default_match_author,
-  ));
+$data->user = readmill_user_search($username);
+if (!$data->user) { // Fallback to a known example.
+  $errors[] = 'The requested user could not be found.';
+  $data->user = readmill_user_search($default_username);
 }
 
 if (count($errors)) { // Transmogrificate any errors into a renderable string.
   $errors = '<ul class="errors"><li>' . implode('</li><li>', $errors) . '</li></ul>';
 }
 
-// Fetch all the readings for this book. We're interested in readings
+// Fetch all the readings for this user. We're interested in readings
 // with highlights (and/or comments), but we also want closing_remarks.
-$data->readings = readmill_book_readings($data->book->id);
+$data->readings = readmill_user_readings($data->user->id);
 
 // For every reading, fetch all the highlights and comments.
 foreach ($data->readings as $reading) {
@@ -89,7 +74,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
   header('Content-Type: application/rss+xml');
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
-  print   '<title>Book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '- Readmilling</title>';
+  print   '<title>Latest updates for ' . htmlspecialchars($data->user->username, ENT_COMPAT, "UTF-8") . '- Readmilling</title>';
   print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']) .'" rel="self" type="application/rss+xml" />';
   print   '<link>http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars(preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI'])) . '</link>';
   print   '<description>@todo</description>';
@@ -116,7 +101,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Book updates for <?php print $data->book->title; ?> - Readmilling</title>
+  <title>Latest updates for <?php print $data->user->username; ?> - Readmilling</title>
   <link rel="stylesheet" href="../misc/default.css" />
 </head>
 <body>
@@ -177,9 +162,8 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
           <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
         </section>
         <section class="secondary-section">
-          <form action="book-updates.php" accept-charset="UTF-8" method="get">
-            <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title, ENT_COMPAT, "UTF-8"); ?>" required />
-            <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
+          <form action="user-updates.php" accept-charset="UTF-8" method="get">
+            <label for="title">Username</label><input id="form-title" name="username" type="text" placeholder="<?php print htmlentities($username, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
           <span class="warning"><strong>Be aware:</strong> @todo</span>

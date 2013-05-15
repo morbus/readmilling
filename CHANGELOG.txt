@@ -11,6 +11,7 @@ book-comments.php:
   * @todo add closing comments
   * @todo add a no_merging=1 flag for debugging/example purposes.
   * @todo replace our custom comment permalink with highlight permalink?
+  * @todo No data message?
 
 book-updates.php:
   * @todo add to changelog and readme
@@ -19,12 +20,23 @@ book-updates.php:
   * @todo add RSS export and icon/sniff thing.
   * @todo add closing comments
   * @todo fill in your @todos. heh.
+  * @todo No data message?
+
+user-updates.php:
+  * @todo add to changelog and readme
+  * @todo add to front page
+  * @todo write up sidebar intro
+  * @todo add RSS export and icon/sniff thing.
+  * @todo fill in your @todos. heh.
+  * @todo No data message?
+  * @todo note new api hooks for user_ lookups.
+
 
 VERSION 0.2, 2013-XX-XX
 -----------------------
   * Fetch all highlights per reading, not just the first 100.
   * Scripts can now (dangerously) ignore caching for certain requests.
-  * All caches default to expiring after one day. We’ll try it out.
+  * All caches now default to expiring after one day. We’ll try it out.
 
 
 VERSION 0.1, 2013-02-22

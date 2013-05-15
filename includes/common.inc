@@ -4,24 +4,41 @@ include_once('../settings.php');
 date_default_timezone_set('GMT');
 
 /**
- * Retrieve a book from the Readmill API.
+ * Search for a book.
  *
- * @param $type
- *   Either 'match' for a high-confidence search or a specific ID lookup.
  * @param $params
- *   An array of parameters for the specified $type lookup.
+ *   An array of parameters for Readmill's 'match' API lookup.
  *
  * @return
  *   The book record on success, NULL on failure.
  */
-function readmill_book($type = 'match', $params = array()) {
+function readmill_book_match($params = array()) {
   $result = readmill_request('books/match', $params);
   if (isset($result->status) && $result->status == 200) {
     return $result->book;
   }
 
-  // @todo $type = 'id' doesn't work yet.
-  // @todo Cache ID lookups.
+  return NULL;
+}
+
+/**
+ * Search for a user.
+ *
+ * @param $username
+ *   The username to search for and, hopefully, match on exactly.
+ *
+ * @return
+ *   The user record on success, NULL on failure.
+ */
+function readmill_user_search($user_search = NULL) {
+  $result = readmill_request('users/search', array('query' => $user_search));
+  if (isset($result->status) && $result->status == 200) {
+    foreach ($result->items as $result) { // No fuzzies.
+      if (strtolower($result->user->username) == strtolower($user_search)) {
+        return $result->user;
+      }
+    }
+  }
 
   return NULL;
 }
@@ -31,9 +48,7 @@ function readmill_book($type = 'match', $params = array()) {
  *
  * Retrieving all readings without any API filters might seem a bit costly.
  * Caching-wise, it's a lot easier to store (or re-request) all of a book's
- * readings than it is to pick through individual or filtered storage. We also
- * get a lot more flexibility with filters (allowing us to, say, get readings
- * with highlight_count >= 1 OR with a closing_remark).
+ * readings than it is to pick through individual or filtered storage.
  *
  * @param $book_id
  *   The book ID to return readings for.
@@ -83,6 +98,62 @@ function readmill_book_readings($book_id, $reset = FALSE) {
 
   // Cache it for faster futures, McFly.
   @mkdir('../cache/book-readings/', 0755, TRUE);
+  file_put_contents($cache_file, json_encode($all_readings), LOCK_EX);
+
+  return $all_readings;
+}
+
+/**
+ * Retrieve all readings for a user.
+ *
+ * @param $user_id
+ *   The user ID to return readings for.
+ * @param $reset
+ *   Whether to reset the cache or not.
+ *
+ * @return
+ *   An array of all readings for this user.
+ */
+function readmill_user_readings($user_id, $reset = FALSE) {
+  $cache_file = "../cache/user-readings/$user_id.json";
+
+  // If our cache is fresh enough per our configuration, use that.
+  if (!$reset && file_exists($cache_file) && filemtime($cache_file) > (time() - $GLOBALS['conf']['cache']['user_readings'])) {
+    return json_decode(file_get_contents($cache_file));
+  }
+
+  // Cache miss. Recreate.
+  $all_readings = array();
+  $found_all_readings = 0;
+  $readings_params = array(
+    'id'          => $user_id,
+    'to'          => '9999-12-31T23:59:59Z',
+    'order'       => 'touched_at',
+    'count'       => 100,
+  );
+
+  while ($found_all_readings == 0) {
+    $readings = readmill_request('users/' . $user_id . '/readings', $readings_params);
+
+    if (isset($readings->status) && $readings->status == 200) {
+      foreach ($readings->items as $reading) {
+        $all_readings[$reading->reading->id] = $reading->reading;
+
+        // Update boundary date for future requests.
+        if (!empty($reading->reading->touched_at)) {
+          $readings_params['to'] = $reading->reading->touched_at;
+        }
+      }
+
+      // If it wasn't max count, we're done.
+      if (count($readings->items) != 100) {
+        $found_all_readings = 1;
+      }
+    }
+  }
+
+  // Cache it for faster futures, McFly.
+  @mkdir('../cache/user-readings/', 0755, TRUE);
   file_put_contents($cache_file, json_encode($all_readings), LOCK_EX);
 
   return $all_readings;
