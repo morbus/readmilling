@@ -180,12 +180,12 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
     <aside class="layout-secondary">
       <div class="layout-secondary-column">
         <section class="book-cover">
-          <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
+          <a href="<?php print $data->book->permalink_url; ?>"><img class="book-cover" alt="Book cover for <?php print $data->book->title; ?>" src="<?php print str_replace('medium', 'original', $data->book->cover_url); ?>" /></a>
         </section>
         <section class="secondary-section">
           <form action="book-updates.php" accept-charset="UTF-8" method="get">
-            <label for="title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title, ENT_COMPAT, "UTF-8"); ?>" required />
-            <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
+            <label for="form-title">Book title</label><input id="form-title" name="title" type="text" placeholder="<?php print htmlentities($match_title, ENT_COMPAT, "UTF-8"); ?>" required />
+            <label for="form-author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
           <span class="warning"><strong>Be aware:</strong> If we've not seen this book before,
