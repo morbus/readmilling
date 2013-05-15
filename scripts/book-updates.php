@@ -42,6 +42,11 @@ if (count($errors)) { // Transmogrificate any errors into a renderable string.
   $errors = '<ul class="errors"><li>' . implode('</li><li>', $errors) . '</li></ul>';
 }
 
+// Pre-build the URLs of the HTML and RSS versions of this view.
+$query_string = '?title=' . urlencode($data->book->title) . '&author=' . urlencode($data->book->author);
+$url_for_rss  = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . $query_string . '&rss=1';
+$url_for_html = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . $query_string; // BOO!
+
 // Fetch all the readings for this book. We're interested in readings
 // with highlights (and/or comments), but we also want closing_remarks.
 $data->readings = readmill_book_readings($data->book->id);
@@ -90,9 +95,9 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
   print '<?xml version="1.0" encoding="utf-8"?>' . "\n";
   print '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>';
   print   '<title>Book updates for ' . htmlspecialchars($data->book->title, ENT_COMPAT, "UTF-8") . '- Readmilling</title>';
-  print   '<atom:link href="http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars($_SERVER['REQUEST_URI']) .'" rel="self" type="application/rss+xml" />';
-  print   '<link>http://' . $_SERVER['HTTP_HOST'] . htmlspecialchars(preg_replace('/[\?&]rss=1/', '', $_SERVER['REQUEST_URI'])) . '</link>';
-  print   '<description>@todo</description>';
+  print   '<description>Book updates shows the 50 most recent highlights and comments made to a book in HTML or RSS.</description>';
+  print   '<atom:link href="' . htmlspecialchars($url_for_rss, ENT_COMPAT, "UTF-8") .'" rel="self" type="application/rss+xml" />';
+  print   '<link>http://' . htmlspecialchars($url_for_html, ENT_COMPAT, "UTF-8") . '</link>';
   print   '<language>en</language>';
   foreach ($data->updates as $timestamp => $updates) {
     foreach ($updates as $update) {
@@ -117,6 +122,7 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
 <head>
   <meta charset="utf-8" />
   <title>Book updates for <?php print $data->book->title; ?> - Readmilling</title>
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php print htmlentities($url_for_rss, ENT_COMPAT, "UTF-8"); ?>" />
   <link rel="stylesheet" href="../misc/default.css" />
 </head>
 <body>
@@ -182,11 +188,14 @@ if (isset($_REQUEST['rss']) && $_REQUEST['rss'] == 1) {
             <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
-          <span class="warning"><strong>Be aware:</strong> @todo</span>
+          <span class="warning"><strong>Be aware:</strong> If we've not seen this book before,
+          or its data has expired, it might take 30 seconds or more before you'll get results.</span>
         </section>
         <section class="secondary-section">
           <h1>About this script</h1>
-          <p>@todo</p>
+          <p><b>Book updates</b> shows the 50 most recent highlights and comments made to a book in HTML
+          or <a href="<?php print htmlentities($url_for_rss, ENT_COMPAT, "UTF-8"); ?>">RSS</a>. For a
+          user-centric approach, see <a href="user-updates.php">User updates</a>.</p>
         </section>
       </div>
     </aside>

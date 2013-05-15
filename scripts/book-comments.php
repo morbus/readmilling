@@ -199,7 +199,8 @@ while (count($highlights_to_merge) != 0) {
             <label for="author">Book author</label><input id="form-author" name="author" type="text" placeholder="<?php print htmlentities($match_author, ENT_COMPAT, "UTF-8"); ?>" required />
             <button>Load book</button>
           </form>
-          <span class="warning"><strong>Be aware:</strong> If we've not seen this book before, or its data has expired, it might take 30 seconds or more before you'll get results.</span>
+          <span class="warning"><strong>Be aware:</strong> If we've not seen this book before, or its
+          data has expired, it might take 30 seconds or more before you'll get results.</span>
         </section>
         <section class="secondary-section">
           <h1>About this script</h1>

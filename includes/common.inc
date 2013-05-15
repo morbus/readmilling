@@ -33,7 +33,7 @@ function readmill_book_match($params = array()) {
 function readmill_user_search($user_search = NULL) {
   $result = readmill_request('users/search', array('query' => $user_search));
   if (isset($result->status) && $result->status == 200) {
-    foreach ($result->items as $result) { // No fuzzies.
+    foreach ($result->items as $result) { // No fuzzies - strict username only.
       if (strtolower($result->user->username) == strtolower($user_search)) {
         return $result->user;
       }
@@ -152,7 +152,7 @@ function readmill_user_readings($user_id, $reset = FALSE) {
     }
   }
 
-  // Cache it for faster futures, McFly.
+  // Cache it for faster futures, Winslow.
   @mkdir('../cache/user-readings/', 0755, TRUE);
   file_put_contents($cache_file, json_encode($all_readings), LOCK_EX);
 

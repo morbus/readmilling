@@ -16,10 +16,7 @@ book-comments.php:
 book-updates.php:
   * @todo add to changelog and readme
   * @todo add to front page
-  * @todo write up sidebar intro
-  * @todo add RSS export and icon/sniff thing.
   * @todo add closing comments
-  * @todo fill in your @todos. heh.
   * @todo No data message?
 
 user-updates.php:

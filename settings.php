@@ -14,5 +14,5 @@ $conf['cache']['user_readings']      = 86400;
 $conf['cache']['reading_highlights'] = 86400;
 $conf['cache']['highlight_comments'] = 86400;
 
-// Alternatively, put your config in a file not tracked by git.
+// Alternatively, put your config in a file not tracked by your VCS.
 include_once('settings.local.php');
