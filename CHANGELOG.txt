@@ -6,6 +6,9 @@ general:
   * @todo this day in readmill script
   * @todo advanced search engine
   * @bug center small book images: http://www.disobey.com/detergent/code/readmilling/scripts/book-comments.php?title=accelerando&author=charles+stross
+  * @todo consider switching the default books to literature instead of technocentric.
+  * @todo we probably need to htmlentities everything we’re spitting out to be safe.
+  * @todo And see what you can do about moving them to htmlspecialchars instead.
 
 book-comments.php:
   * @todo add closing comments
