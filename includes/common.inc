@@ -76,6 +76,10 @@ function readmill_book_readings($book_id, $reset = FALSE) {
     'count'       => 100,
   );
 
+  if (empty($book_id)) {
+    return array();
+  }
+
   while ($found_all_readings == 0) {
     $readings = readmill_request('books/' . $book_id . '/readings', $readings_params);
 
@@ -131,6 +135,10 @@ function readmill_user_readings($user_id, $reset = FALSE) {
     'order'       => 'touched_at',
     'count'       => 100,
   );
+
+  if (empty($user_id)) {
+    return array();
+  }
 
   while ($found_all_readings == 0) {
     $readings = readmill_request('users/' . $user_id . '/readings', $readings_params);
@@ -188,6 +196,10 @@ function readmill_reading_highlights($reading_id, $reset = FALSE) {
     'count'       => 100,
   );
 
+  if (empty($reading_id)) {
+    return array();
+  }
+
   while ($found_all_highlights == 0) {
     $highlights = readmill_request('readings/' . $reading_id . '/highlights', $highlights_params);
 
@@ -243,6 +255,10 @@ function readmill_highlight_comments($highlight_id, $reset = FALSE) {
     'order'       => 'posted_at',
     'count'       => 100,
   );
+
+  if (empty($highlight_id)) {
+    return array();
+  }
 
   while ($found_all_comments == 0) {
     $comments = readmill_request('highlights/' . $highlight_id . '/comments', $comments_params);

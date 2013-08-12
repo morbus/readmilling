@@ -9,6 +9,7 @@ general:
   * @todo consider switching the default books to literature instead of technocentric.
   * @todo we probably need to htmlentities everything we’re spitting out to be safe.
   * @todo And see what you can do about moving them to htmlspecialchars instead.
+  * @todo Fix display of all scripts when bad API key or no data returned.
 
 book-comments.php:
   * @todo add closing comments
