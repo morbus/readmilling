@@ -10,6 +10,7 @@ general:
   * @todo we probably need to htmlentities everything we’re spitting out to be safe.
   * @todo And see what you can do about moving them to htmlspecialchars instead.
   * @todo Fix display of all scripts when bad API key or no data returned.
+  * @todo add Morbus Iff block to add pages.
 
 book-comments.php:
   * @todo add closing comments

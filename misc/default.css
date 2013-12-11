@@ -83,6 +83,10 @@ form input {
   -webkit-border-radius: 3px;
 }
 
+.layout-primary-column form input {
+  width: 98%;
+}
+
 form button {
   float: right;
 }

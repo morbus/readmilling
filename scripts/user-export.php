@@ -1,9 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Export a Readmill user's data.
+ */
+
+// Disable output buffering.
+@apache_setenv('no-gzip', 1);
+@ini_set('zlib.output_compression', 0);
+@ini_set('implicit_flush', 1);
+ob_end_flush();
+ob_implicit_flush(1);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Available scripts - Readmilling</title>
-  <link rel="stylesheet" href="misc/default.css" />
+  <title>User data export - Readmilling</title>
+  <link rel="stylesheet" href="../misc/default.css" />
 </head>
 <body>
   <header class="page-toolbar toolbar">
@@ -17,20 +31,23 @@
     </div>
   </header>
 
-  <div class="page-content container" role="main">
+  <div class="page-content container">
     <section class="layout-primary">
       <div class="layout-primary-column">
-        <header><h1><span class="header-group-primary">Available scripts</span></h1></header>
-        <section id="scripts">
-          <article>
-            <ul>
-              <li><p><a href="scripts/book-comments.php"><b>Book comments</b></a> tries to merge all comments left on similar
-              highlights into a single entry. Different versions of the same book can have highlights in different locations,
-              so the script can't guarantee the merged entries are in the same order they appear in the text.</p></li>
-            </ul>
-          </article>
-
-          <p><em>Additional scripts are planned - Readmilling is still early in the development process.</em></p>
+        <header>
+          <h1>
+            <span class="header-group-primary">User data export</span>
+            <span class="header-group-secondary">You put it in, now get it out.</span>
+          </h1>
+        </header>
+        <section id="highlights">
+          <form action="user-export.php" accept-charset="UTF-8" method="get">
+            <label for="form-title">Username</label>
+            <input id="form-title" name="username" type="text" placeholder="<?php print htmlentities($_REQUEST['username'], ENT_COMPAT, "UTF-8"); ?>" required />
+            <button>Export user data</button>
+          </form>
+          <span class="warning"><strong>Be aware:</strong> If we've not seen this user before,
+          or its data has expired, it might take a few minutes before you'll get results.</span>
         </section>
       </div>
     </section>
@@ -38,10 +55,8 @@
     <aside class="layout-secondary">
       <div class="layout-secondary-column">
         <section class="secondary-section">
-          <h1>About Readmilling</h1>
-          <p><a href="http://www.disobey.com/d/code/readmilling/">Readmilling</a> is a collection of potentially useful
-          <a href="https://github.com/morbus/readmilling">open source scripts</a> using the API provided by <a href="http://readmill.com/">Readmill</a>,
-          a social ebook reader <a href="https://itunes.apple.com/gb/artist/readmill-network-ltd./id438032667">available for iPhone and iPad</a>.</p>
+          <h1>About this script</h1>
+          <p>@todo</p>
         </section>
         <section class="secondary-section">
           <h1>Morbus Iff</h1>
