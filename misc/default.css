@@ -217,15 +217,6 @@ form.button::after {
   padding-bottom: 12px;
 }
 
-#scripts article img {
-  border: 1px solid #ededed;
-  float: left;
-}
-
-#scripts article p {
-  margin-left: 175px;
-}
-
 #highlights article.highlight {
   border-bottom: 1px solid #ededed;
   padding-top: 20px;
