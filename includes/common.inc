@@ -313,6 +313,21 @@ function readmill_request($resource, $params = array()) {
 }
 
 /**
+ * Disable output buffering in Apache, PHP, and certain browsers.
+ */
+function disable_output_buffering() {
+  @apache_setenv('no-gzip', 1);
+  @ini_set('zlib.output_compression', 0);
+  @ini_set('implicit_flush', 1);
+  @ob_end_flush();
+  @ob_implicit_flush(1);
+
+  // Safari and IE need a payload of a certain number of bytes to start.
+  // Safari might need to see the rise and fall of an HTML element.
+  print str_pad('', 1024); // print '<span class="buffering" />';
+}
+
+/**
  * Request a resource using HTTP GET.
  *
  * @param $url

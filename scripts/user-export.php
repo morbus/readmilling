@@ -5,12 +5,55 @@
  * Export a Readmill user's data.
  */
 
-// Disable output buffering.
-@apache_setenv('no-gzip', 1);
-@ini_set('zlib.output_compression', 0);
-@ini_set('implicit_flush', 1);
-ob_end_flush();
-ob_implicit_flush(1);
+include_once "../includes/common.inc";
+
+disable_output_buffering();
+
+$username = isset($_REQUEST['username']) ? $_REQUEST['username'] : '';
+
+// Retrieve, store, package.
+function start_export($username) {
+  $data = new stdClass;
+
+  if (!$data->user = readmill_user_search($username)) {
+    print 'The requested user could not be found.';
+    return;
+  }
+
+  // Place everything here for packaging.
+  $export_dir = '../exports/' . $username;
+  @mkdir($export_dir, 0755, TRUE);
+
+  // Load all the user's readings, highlights, and comments.
+  $data->readings = readmill_user_readings($data->user->id);
+  foreach ($data->readings as $rid => $reading) {
+    print heartbeat();
+
+    if ($reading->highlights_count >= 1) {
+      $data->readings->$rid->highlights = readmill_reading_highlights($reading->id);
+
+      foreach ($data->readings->$rid->highlights as $hid => $highlight) {
+        print heartbeat();
+
+        if ($highlight->comments_count >= 1) {
+          $data->readings->$rid->highlights->$hid->comments = readmill_highlight_comments($highlight->id);
+        }
+      }
+    }
+  }
+
+  // For ease of parsing by developers, a giant dump of everything combined.
+  file_put_contents($export_dir . '/user_data.json', json_encode($data), LOCK_EX);
+
+  print "<p>Your user data is available: <a href=\"$export_dir/user_data.json\">$export_dir/user_data.json</a>.</p>";
+}
+
+/**
+ * Keep-alive ping.
+ */
+function heartbeat() {
+  return '<span class="heartbeat">.</span> .';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +75,13 @@ ob_implicit_flush(1);
   </header>
 
   <div class="page-content container">
+    <?php if (!empty($username)) { ?>
+    <section id="long-running-results">
+      <h1>Progress report</h1>
+      <?php start_export($username); ?>
+    </section>
+    <?php } ?>
+
     <section class="layout-primary">
       <div class="layout-primary-column">
         <header>
@@ -40,11 +90,10 @@ ob_implicit_flush(1);
             <span class="header-group-secondary">You put it in, now get it out.</span>
           </h1>
         </header>
-        <section id="highlights">
+        <section id="user-export-form">
           <form action="user-export.php" accept-charset="UTF-8" method="get">
-            <label for="form-title">Username</label>
-            <input id="form-title" name="username" type="text" placeholder="<?php print htmlentities($_REQUEST['username'], ENT_COMPAT, "UTF-8"); ?>" required />
-            <button>Export user data</button>
+            <label for="form-title">Username</label><input id="form-title" name="username" type="text" placeholder="<?php print htmlentities($username, ENT_COMPAT, "UTF-8"); ?>" required />
+            <button>Export user data</button> <!-- NP: 'Let's Go Away (Daytona USA)' from Various Artists's album 'Segacon: The Best Of Sega Game Music Vol. 1' -->
           </form>
           <span class="warning"><strong>Be aware:</strong> If we've not seen this user before,
           or its data has expired, it might take a few minutes before you'll get results.</span>
