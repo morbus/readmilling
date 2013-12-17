@@ -43,7 +43,7 @@ function start_export($username) {
   }
 
   // For ease of parsing by developers, a giant dump of everything combined.
-  file_put_contents($export_dir . '/user_data.json', json_encode($data), LOCK_EX);
+  file_put_contents($export_dir . '/user-data.json', json_encode($data), LOCK_EX);
 
   print "<p>Your user data is available: <a href=\"$export_dir/user_data.json\">$export_dir/user_data.json</a>.</p>";
 }

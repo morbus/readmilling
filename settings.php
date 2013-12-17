@@ -9,10 +9,10 @@ global $conf;
 $conf['client_id'] = 'YOUR-READMILL-CLIENT-ID';
 
 // How long API requests can be cached for.
-$conf['cache']['book_readings']      = 86400;
-$conf['cache']['user_readings']      = 86400;
-$conf['cache']['reading_highlights'] = 86400;
-$conf['cache']['highlight_comments'] = 86400;
+$conf['cache']['book-readings']      = 86400;
+$conf['cache']['user-readings']      = 86400;
+$conf['cache']['reading-highlights'] = 86400;
+$conf['cache']['highlight-comments'] = 86400;
 
 // Alternatively, put your config in a file not tracked by your VCS.
 include_once('settings.local.php');

@@ -40,11 +40,14 @@ user-updates.php:
   * @todo note new api hooks for user_ lookups.
 
 
-VERSION 0.2, 2013-XX-XX
+VERSION 0.2, 2014-XX-XX
 -----------------------
+  * Removed a ton of duplicate code from common.inc.
+  * All settings have been changed to hyphens, not underscores.
+  * Switched over to Readmill's "pagination" API support.
   * Fetch all highlights per reading, not just the first 100.
   * Scripts can now (dangerously) ignore caching for certain requests.
-  * All caches now default to expiring after one day. We’ll try it out.
+  * All caches now default to expiring after one day. We'll try it out.
 
 
 VERSION 0.1, 2013-02-22
