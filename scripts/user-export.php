@@ -24,7 +24,7 @@ function start_export($username) {
 
   // Store here for packaging.
   $export_dir = '../exports/';
-  $export_user_dir = $export_dir . $username;
+  $export_user_dir = $export_dir . $username . '/';
   @mkdir($export_user_dir, 0755, TRUE);
 
   // Load everything we can.
@@ -60,16 +60,30 @@ function start_export($username) {
   print " done.</li></ul>";
 
   // For ease of parsing by developers, a giant dump of everything combined.
-  file_put_contents($export_user_dir . '/all-user-data.json', json_encode($data), LOCK_EX);
+  file_put_contents($export_user_dir . 'all-user-data.json', json_encode($data), LOCK_EX);
+
+  // Create some friendlier exports.
+  foreach ($data->readings as $reading) {
+    $safe_title = preg_replace('/[^a-zA-Z0-9 ]+/', '', $reading->book->title);
+    $export_book_dir = $export_user_dir . 'library/' . $safe_title . '/';
+    @mkdir($export_book_dir, 0755, TRUE);
+
+    $markdown = "**" . $reading->book->title . '** by *' . $reading->book->author . "*\n\n";
+
+    foreach ($reading->highlights as $highlight) {
+      $markdown .= $highlight->content . "\n\n---\n\n";
+    }
+
+    file_put_contents($export_book_dir . $safe_title . '.md', $markdown, LOCK_EX);
+  }
 
   // Zip and link. Yeah, there's a PHP ZipArchive extension, but it'd require
   // about twenty lines of code to handle recursion and deletion and meh.
-  chdir($export_dir);
-  if (exec('zip -r ' . escapeshellarg($username . '.zip') . ' ' . escapeshellarg($username))) {
-    print "success";
+  if (exec('cd ' . escapeshellarg($export_dir) . ' && zip -mrT -FS ' . escapeshellarg($username . '.zip') . ' ' . escapeshellarg($username))) {
+    print '<a href="../exports/' . $username . '.zip">../exports/' . $username . '.zip is now available</a>.';
   }
   else {
-    print "failure";
+    print "failure - tell @morbusiff about it, eh?";
   }
 }
 ?>
