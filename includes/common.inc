@@ -258,3 +258,10 @@ function disable_output_buffering() {
   // print '<span class="buffering" />';
   print str_pad('', 1024);
 }
+
+/**
+ * For use with disable_output_buffering() and long-running scripts.
+ */
+function heartbeat() {
+  return '<span class="heartbeat">.</span> ';
+}
