@@ -11,10 +11,12 @@ general:
   * @todo And see what you can do about moving them to htmlspecialchars instead.
   * @todo Fix display of all scripts when bad API key or no data returned.
   * @todo add Morbus Iff block to add pages.
+  * @todo add full name matching in user/search (for david kjelkerud).
 
 user-export.php:
   * reading periods are not supported yet.
   * closing comments are not supported yet.
+  * ideally should use oAuth for private data export.
 
 book-comments.php:
   * @todo add closing comments

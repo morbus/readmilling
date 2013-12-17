@@ -56,8 +56,8 @@ function readmill_user_search($user_search = NULL) {
  * @param bool $reset
  *   Whether to reset the cache or not.
  *
- * @return array
- *   An array of all readings for this book.
+ * @return object
+ *   An object of all readings for this book.
  */
 function readmill_book_readings($book_id, $reset = FALSE) {
   return readmill_results('book-readings', $book_id, 'books/' . $book_id . '/readings', 'reading', $reset);
@@ -71,8 +71,8 @@ function readmill_book_readings($book_id, $reset = FALSE) {
  * @param bool $reset
  *   Whether to reset the cache or not.
  *
- * @return array
- *   An array of all readings for this user.
+ * @return object
+ *   An object of all readings for this user.
  */
 function readmill_user_readings($user_id, $reset = FALSE) {
   return readmill_results('user-readings', $user_id, 'users/' . $user_id . '/readings', 'reading', $reset);
@@ -86,8 +86,8 @@ function readmill_user_readings($user_id, $reset = FALSE) {
  * @param bool $reset
  *   Whether to reset the cache or not.
  *
- * @return array
- *   An array of all highlights for this reading.
+ * @return object
+ *   An object of all highlights for this reading.
  */
 function readmill_reading_highlights($reading_id, $reset = FALSE) {
   return readmill_results('reading-highlights', $reading_id, 'readings/' . $reading_id . '/highlights', 'highlight', $reset);
@@ -101,15 +101,15 @@ function readmill_reading_highlights($reading_id, $reset = FALSE) {
  * @param bool $reset
  *   Whether to reset the cache or not.
  *
- * @return array
- *   An array of all comments for this highlight.
+ * @return object
+ *   An object of all comments for this highlight.
  */
 function readmill_highlight_comments($highlight_id, $reset = FALSE) {
   return readmill_results('highlight-comments', $highlight_id, 'highlights/' . $highlight_id . '/comments', 'comment', $reset);
 }
 
 /**
- * Retrieve all available data for a particular object.
+ * Retrieve all available data for a particular request.
  *
  * @param string $cache_type
  *   book-readings: Retrieve all readings for a book id.
@@ -125,8 +125,8 @@ function readmill_highlight_comments($highlight_id, $reset = FALSE) {
  * @param bool $reset
  *   Boolean; whether to reset the cache or not.
  *
- * @return array
- *   An array of all data for the passed object.
+ * @return object
+ *   An object of all data for the passed request.
  */
 function readmill_results($cache_type, $id, $resource, $resource_key, $reset = FALSE) {
   if (empty($cache_type) || empty($id) || empty($resource) || empty($resource_key)) {
@@ -140,7 +140,7 @@ function readmill_results($cache_type, $id, $resource, $resource_key, $reset = F
   }
 
   // Cache miss. Recreate.
-  $all_results = array();
+  $all_results = new stdClass;
   $found_all_results = 0;
   $type_params = array(
     'id'          => $id,
@@ -154,7 +154,8 @@ function readmill_results($cache_type, $id, $resource, $resource_key, $reset = F
 
     if (isset($results->status) && $results->status == 200) {
       foreach ($results->items as $result) {
-        $all_results[$result->$resource_key->id] = $result->$resource_key;
+        $id = $result->$resource_key->id;
+        $all_results->$id = $result->$resource_key;
       }
 
       if (!empty($results->pagination->next)) {

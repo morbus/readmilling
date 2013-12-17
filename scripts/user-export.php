@@ -70,8 +70,10 @@ function start_export($username) {
 
     $markdown = "**" . $reading->book->title . '** by *' . $reading->book->author . "*\n\n";
 
-    foreach ($reading->highlights as $highlight) {
-      $markdown .= $highlight->content . "\n\n---\n\n";
+    if (!empty($reading->highlights)) {
+      foreach ($reading->highlights as $highlight) {
+        $markdown .= $highlight->content . "\n\n---\n\n";
+      }
     }
 
     file_put_contents($export_book_dir . $safe_title . '.md', $markdown, LOCK_EX);
