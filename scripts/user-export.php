@@ -6,7 +6,6 @@
  */
 
 include_once "../includes/common.inc";
-
 disable_output_buffering();
 
 $username = isset($_REQUEST['username']) ? $_REQUEST['username'] : '';
@@ -15,44 +14,63 @@ $username = isset($_REQUEST['username']) ? $_REQUEST['username'] : '';
 function start_export($username) {
   $data = new stdClass;
 
+  // @todo Check for cache time and prevent regeneration.
+
   if (!$data->user = readmill_user_search($username)) {
+    // @todo turn this into existing error template.
     print 'The requested user could not be found.';
     return;
   }
 
-  // Place everything here for packaging.
-  $export_dir = '../exports/' . $username;
-  @mkdir($export_dir, 0755, TRUE);
+  // Store here for packaging.
+  $export_dir = '../exports/';
+  $export_user_dir = $export_dir . $username;
+  @mkdir($export_user_dir, 0755, TRUE);
 
-  // Load all the user's readings, highlights, and comments.
+  // Load everything we can.
+  print "<ul><li>Fetching user data...";
   $data->readings = readmill_user_readings($data->user->id);
   foreach ($data->readings as $rid => $reading) {
     print heartbeat();
 
+    // Remove duplicated user information. Readmill's API will copy this
+    // into individual readings, highlights, and comments but we'll remove
+    // it for the sake of a cleaner and smaller export. In the relatively
+    // small test case of 'morbus', this reduced file size by roughly 35%.
+    unset($reading->user);
+
+    // @todo Doesn't support reading periods yet.
+
     if ($reading->highlights_count >= 1) {
       $data->readings->$rid->highlights = readmill_reading_highlights($reading->id);
-
       foreach ($data->readings->$rid->highlights as $hid => $highlight) {
         print heartbeat();
+        unset($highlight->user);
 
         if ($highlight->comments_count >= 1) {
           $data->readings->$rid->highlights->$hid->comments = readmill_highlight_comments($highlight->id);
+          foreach ($data->readings->$rid->highlights->$hid->comments as $cid => $comment) {
+            print heartbeat();
+            unset($comment->user);
+          }
         }
       }
     }
   }
+  print " done.</li></ul>";
 
   // For ease of parsing by developers, a giant dump of everything combined.
-  file_put_contents($export_dir . '/user-data.json', json_encode($data), LOCK_EX);
+  file_put_contents($export_user_dir . '/all-user-data.json', json_encode($data), LOCK_EX);
 
-  print "<p>Your user data is available: <a href=\"$export_dir/user_data.json\">$export_dir/user_data.json</a>.</p>";
-}
-
-/**
- * Keep-alive ping.
- */
-function heartbeat() {
-  return '<span class="heartbeat">.</span> .';
+  // Zip and link. Yeah, there's a PHP ZipArchive extension, but it'd require
+  // about twenty lines of code to handle recursion and deletion and meh.
+  chdir($export_dir);
+  if (exec('zip -r ' . escapeshellarg($username . '.zip') . ' ' . escapeshellarg($username))) {
+    print "success";
+  }
+  else {
+    print "failure";
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -97,6 +115,11 @@ function heartbeat() {
           </form>
           <span class="warning"><strong>Be aware:</strong> If we've not seen this user before,
           or its data has expired, it might take a few minutes before you'll get results.</span>
+        </section>
+
+        <section id="user-export-explanation">
+          <h1>What you'll get</h1>
+
         </section>
       </div>
     </section>
