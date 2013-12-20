@@ -2,7 +2,6 @@
 BUGS AND TODOS
 --------------
 general:
-  * @todo export script
   * @todo this day in readmill script
   * @todo advanced search engine
   * @bug center small book images: http://www.disobey.com/detergent/code/readmilling/scripts/book-comments.php?title=accelerando&author=charles+stross
@@ -12,11 +11,16 @@ general:
   * @todo Fix display of all scripts when bad API key or no data returned.
   * @todo add Morbus Iff block to add pages.
   * @todo add full name matching in user/search (for david kjelkerud).
+  * @todo replace “Be aware” error messages with hidable progress bar?
 
 user-export.php:
+  * @todo add to changelog and readme
+  * @todo add to front page
   * reading periods are not supported yet.
   * closing comments are not supported yet.
   * ideally should use oAuth for private data export.
+  * wd be great to have OPML (Highlights—>Comments) so I can pull into iThoughts
+    https://twitter.com/adoran2/status/412961190919553024
 
 book-comments.php:
   * @todo add closing comments

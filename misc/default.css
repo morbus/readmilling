@@ -67,7 +67,7 @@ form label {
 }
 
 form input {
-  background-color: white
+  background-color: white;
   display: block;
   font-family: Scala, Georgia, Times, serif;
   font-size: 14px;
@@ -159,6 +159,17 @@ form.button::after {
   padding-bottom: 20px;
 }
 
+.progress-report {
+  background-color: #f4f5f3;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 10px 35px 10px 10px;
+}
+
+.progress-report .heartbeat {
+  font-size: 12px;
+}
+
 .layout-primary {
   float: left;
   width: 740px;
@@ -184,6 +195,7 @@ form.button::after {
   padding-top: 10px;
 }
 
+.progress-report h1,
 .layout-primary-column section h1,
 .layout-secondary-column section h1 {
   font-family: "Scala Sans SC", Helvetica, Arial, sans-serif;
@@ -255,6 +267,7 @@ article.comment .content {
   margin-left: 70px;
 }
 
+.progress-report a,
 #scripts article a,
 article.comment a,
 .layout-secondary a {
@@ -289,10 +302,7 @@ article.comment aside {
   border-bottom: 1px solid #e6e6e6;
   font-size: 14px;
   line-height: 1.5;
-  padding-left: 8.33333%;
-  padding-right: 8.33333%;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px 8.33333%;
 }
 
 .layout-secondary ul {

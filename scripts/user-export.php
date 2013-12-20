@@ -15,6 +15,8 @@ function start_export($username) {
   $data = new stdClass;
 
   // @todo Check for cache time and prevent regeneration.
+  // Should we need to, given that the other files are cached?
+  // If anything, we'd be saving zip file generation only.
 
   if (!$data->user = readmill_user_search($username)) {
     // @todo turn this into existing error template.
@@ -27,12 +29,9 @@ function start_export($username) {
   $export_user_dir = $export_dir . $username . '/';
   @mkdir($export_user_dir, 0755, TRUE);
 
-  // Load everything we can.
-  print "<ul><li>Fetching user data...";
+  print "<ul><li>Requesting readings, highlights, and comments: ";
   $data->readings = readmill_user_readings($data->user->id);
   foreach ($data->readings as $rid => $reading) {
-    print heartbeat();
-
     // Remove duplicated user information. Readmill's API will copy this
     // into individual readings, highlights, and comments but we'll remove
     // it for the sake of a cleaner and smaller export. In the relatively
@@ -44,7 +43,6 @@ function start_export($username) {
     if ($reading->highlights_count >= 1) {
       $data->readings->$rid->highlights = readmill_reading_highlights($reading->id);
       foreach ($data->readings->$rid->highlights as $hid => $highlight) {
-        print heartbeat();
         unset($highlight->user);
 
         if ($highlight->comments_count >= 1) {
@@ -57,13 +55,14 @@ function start_export($username) {
       }
     }
   }
-  print " done.</li></ul>";
 
   // For ease of parsing by developers, a giant dump of everything combined.
   file_put_contents($export_user_dir . 'all-user-data.json', json_encode($data), LOCK_EX);
 
   // Create some friendlier exports.
+  print " Generating exports in Markdown: ";
   foreach ($data->readings as $reading) {
+    print heartbeat();
     $safe_title = preg_replace('/[^a-zA-Z0-9 ]+/', '', $reading->book->title);
     $export_book_dir = $export_user_dir . 'library/' . $safe_title . '/';
     @mkdir($export_book_dir, 0755, TRUE);
@@ -78,14 +77,15 @@ function start_export($username) {
 
     file_put_contents($export_book_dir . $safe_title . '.md', $markdown, LOCK_EX);
   }
+  print ' done.</li></ul>';
 
   // Zip and link. Yeah, there's a PHP ZipArchive extension, but it'd require
   // about twenty lines of code to handle recursion and deletion and meh.
   if (exec('cd ' . escapeshellarg($export_dir) . ' && zip -mrT -FS ' . escapeshellarg($username . '.zip') . ' ' . escapeshellarg($username))) {
-    print '<a href="../exports/' . $username . '.zip">../exports/' . $username . '.zip is now available</a>.';
+    print '<p>Your Readmill data has been exported and is <a href="../exports/' . $username . '.zip">now available for download</a>.</p>';
   }
   else {
-    print "failure - tell @morbusiff about it, eh?";
+    print '<p>There was a failure collecting your data. E-mail <a href="mailto:morbus@disobey.com">morbus@disobey.com</a> for further support.</p>';
   }
 }
 ?>
@@ -110,7 +110,7 @@ function start_export($username) {
 
   <div class="page-content container">
     <?php if (!empty($username)) { ?>
-    <section id="long-running-results">
+    <section class="progress-report">
       <h1>Progress report</h1>
       <?php start_export($username); ?>
     </section>
